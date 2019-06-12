@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<!--        /**-->
+<!--        * @author Elogic Team-->
+<!--        * @copyright Copyright (c) 2019 Elogic (https://elogic.co)-->
+<!--        */-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="standard">
+        <route frontName="diggecard" id="diggecard">
+            <module name="Diggecard_Giftcard"/>
+        </route>
+    </router>
+</config>

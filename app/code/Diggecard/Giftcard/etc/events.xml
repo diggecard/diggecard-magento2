@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--        /**-->
+<!--        * @author Elogic Team-->
+<!--        * @copyright Copyright (c) 2019 Elogic (https://elogic.co)-->
+<!--        */-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="sales_model_service_quote_submit_success">
+        <observer name="diggecard_giftcard_sales_order_save_after"
+                  instance="Diggecard\Giftcard\Observer\Api\AfterOrderSave\Post\Order\Complete"/>
+    </event>
+
+    <event name="checkout_cart_product_add_after">
+        <observer name="dg_giftcard_cart_item_customprice"
+                  instance="Diggecard\Giftcard\Observer\Cart\CustomPrice"/>
+    </event>
+
+    <event name="sales_model_service_quote_submit_before">
+        <observer name="dg_giftcard_reserve_discount_on_card" instance="Diggecard\Giftcard\Observer\Sales\ReserveValue"/>
+    </event>
+
+    <event name="sales_order_invoice_save_after">
+        <observer name="dg_giftcard_capture_gift_card_value" instance="Diggecard\Giftcard\Observer\Sales\CaptureValue"/>
+    </event>
+</config>

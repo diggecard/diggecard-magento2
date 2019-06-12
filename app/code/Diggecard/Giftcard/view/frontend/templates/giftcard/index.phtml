@@ -1,0 +1,30 @@
+<?php
+/**
+ * @author Elogic Team
+ * @copyright Copyright (c) 2019 Elogic (https://elogic.co)
+ */
+?>
+<h1>There is Diggecard Page...</h1>
+
+
+<?php /** @var \Diggecard\Giftcard\Block\Giftcard\Index $block */ ?>
+<iframe id="diggecard-giftcard-iframe" allow="camera; microphone" src="<?php echo $block->getIframeSrc()?>" scrolling="no">
+</iframe>
+
+<script type="text/x-magento-init">
+{
+    "*": {
+        "giftcardIframePostMessageListener": {}
+    }
+}
+</script>
+
+<script>
+    var iframe = document.getElementById('diggecard-giftcard-iframe');
+    window.addEventListener("message", receiveMessage, false);
+    function receiveMessage(event) {
+        if (event.data.height) {
+            iframe.setAttribute('height', event.data.height);
+        }
+    }
+</script>

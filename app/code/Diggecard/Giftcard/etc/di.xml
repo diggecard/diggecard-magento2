@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--        /**-->
+<!--        * @author Elogic Team-->
+<!--        * @copyright Copyright (c) 2019 Elogic (https://elogic.co)-->
+<!--        */-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <preference for="Diggecard\Giftcard\Api\Data\GiftcardInterface" type="Diggecard\Giftcard\Model\Giftcard" />
+    <preference for="Diggecard\Giftcard\Api\Data\GiftcardSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="Diggecard\Giftcard\Api\GiftcardRepositoryInterface" type="Diggecard\Giftcard\Model\GiftcardRepository" />
+
+    <preference for="Diggecard\Giftcard\Api\Data\GiftcardApiInterface" type="Diggecard\Giftcard\Model\Api\GiftcardApi" />
+    <preference for="Diggecard\Giftcard\Api\GiftcardApiRepositoryInterface" type="Diggecard\Giftcard\Model\Api\GiftcardApiRepository" />
+    <preference for="Diggecard\Giftcard\Api\OrderApiRepositoryInterface" type="Diggecard\Giftcard\Model\Api\OrderApiRepository" />
+
+    <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
+        <plugin name="DggiftcardQuoteConvertToOrder" type="Diggecard\Giftcard\Plugin\Quote\ConvertToOrder"/>
+    </type>
+
+    <type name="Magento\Sales\Block\Adminhtml\Order\Invoice\Create\Items">
+        <plugin name="DiggecardCanEditInvoiceQty" type="Diggecard\Giftcard\Plugin\Invoice\CanEditQty"/>
+    </type>
+</config>
