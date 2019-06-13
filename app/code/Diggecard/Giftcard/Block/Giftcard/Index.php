@@ -43,4 +43,12 @@ class Index extends Template
     {
         return $this->config->getIframeSrc();
     }
+
+    /**
+     * @return string
+     */
+    public function getHeading()
+    {
+        return $this->config->getHeading();
+    }
 }

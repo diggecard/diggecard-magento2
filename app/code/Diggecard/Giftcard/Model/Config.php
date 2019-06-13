@@ -18,6 +18,7 @@ class Config
     const XML_PATH_API_URL = 'diggecard/giftcard/api_url';
     const XML_PATH_IFRAME_SRC = 'diggecard/giftcard/iframe_src';
     const XML_PATH_TIME_TO_RESERVE = 'diggecard/giftcard/time_to_reserve';
+    const XML_PATH_HEADING = 'diggecard/giftcard/heading';
     /**#@-*/
 
     /**
@@ -109,6 +110,19 @@ class Config
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_TIME_TO_RESERVE,
+            ScopeInterface::SCOPE_WEBSITE
+        );
+    }
+
+    /**
+     * Retrieve config value of reserve time
+     *
+     * @return float
+     */
+    public function getHeading()
+    {
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_HEADING,
             ScopeInterface::SCOPE_WEBSITE
         );
     }
