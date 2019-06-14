@@ -5,8 +5,9 @@
         <input id="giftcard_code" name="giftcard_code" class="price" data-bind="value: getGiftcardDefaultCode()"/>
         <button class="primary update-total" data-bind="click: setDiscountValue">Update</button>
         <div class="giftcard-invalid" data-bind="visible: qrInvalidError">This QR Code is invalid!</div>
-        <div class="giftcard-invalid" data-bind="visible: cardViaCardError">Cannot purchase giftcard via giftcard!</div>
+        <div class="giftcard-invalid" data-bind="visible: cardViaCardError">Cannot purchase Gift Card via Gift Card!</div>
         <div class="giftcard-invalid" data-bind="visible: emptyGiftCard">Gift Card is empty!</div>
+        <div class="giftcard-invalid" data-bind="visible: noSuchGiftCard">No such Gift Card</div>
     </div>
 
     <div id="giftcard-info" data-bind="visible: giftcardValid">

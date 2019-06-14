@@ -18,6 +18,7 @@ define(
             qrInvalidError: ko.observable(false),
             cardViaCardError: ko.observable(false),
             emptyGiftCard: ko.observable(false),
+            noSuchGiftCard: ko.observable(false),
 
             defaults: {
                 template: 'Diggecard_Giftcard/checkout/summary/giftcard'
@@ -109,6 +110,9 @@ define(
                 } else if (ajaxData.error_type == '3'){
                     self.emptyGiftCard(true);
                 }
+                // else if (ajaxData.error_type == '4'){
+                //     self.noSuchGiftCard(true);
+                // }
             },
 
             updateCartTotals: function () {

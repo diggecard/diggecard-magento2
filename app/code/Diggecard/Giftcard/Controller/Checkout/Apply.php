@@ -19,6 +19,7 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Diggecard\Giftcard\Model\Giftcard\Manager as GiftcardManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Action\Action;
+use Magento\Framework\Message\ManagerInterface;
 
 /**
  * Class Apply
@@ -62,6 +63,11 @@ class Apply extends Action
      */
     private $logger;
 
+    /**
+     * @var ManagerInterface
+     */
+    protected $_messageManager;
+
     const GIFTCARD_SKU = ['dg-general-giftcard'];
 
     /**
@@ -73,7 +79,9 @@ class Apply extends Action
      * @param PriceCurrencyInterface $priceCurrency
      * @param CartRepositoryInterface $quoteRepository
      * @param GiftcardManager $giftcardManager
+     * @param StoreManagerInterface $storeManager
      * @param Log $logger
+     * @param ManagerInterface $messageManager
      */
     public function __construct(
         Context $context,
@@ -83,7 +91,8 @@ class Apply extends Action
         CartRepositoryInterface $quoteRepository,
         GiftcardManager $giftcardManager,
         StoreManagerInterface $storeManager,
-        Log $logger
+        Log $logger,
+        ManagerInterface $messageManager
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
@@ -93,10 +102,12 @@ class Apply extends Action
         $this->giftcardManager = $giftcardManager;
         $this->_storeManager = $storeManager;
         $this->logger = $logger;
+        $this->_messageManager = $messageManager;
     }
 
     /**
      * @return ResponseInterface|Json|ResultInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute()
     {
@@ -113,6 +124,17 @@ class Apply extends Action
             $this->logger->saveLog('GiftCard validation on cart');
             /** @var GiftcardInterface $giftcard */
             $giftcard = $this->giftcardManager->validateGiftcard($qrCode, true);
+            if (!$giftcard) {
+                $message = 'No such Gift Card with code: '.$qrCode;
+                $this->_messageManager->addErrorMessage(__($message));
+                $response = [
+                    'valid' => false,
+                    'error_type' => 4,
+                    'message' => 'No such giftcard!'
+                ];
+                return $result->setData($response);
+            }
+
             $this->logger->saveLog($giftcard->getData());
 
             foreach (self::GIFTCARD_SKU as $sku) {

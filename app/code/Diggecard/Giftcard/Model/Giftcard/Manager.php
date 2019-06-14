@@ -14,7 +14,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 use Diggecard\Giftcard\Api\GiftcardApiRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Message\ManagerInterface;
 
 /**
  * Class Manager
@@ -49,11 +48,6 @@ class Manager
     protected $_storeManager;
 
     /**
-     * @var ManagerInterface
-     */
-    protected $_messageManager;
-
-    /**
      * Manager constructor.
      *
      * @param GiftcardFactory $giftcardFactory
@@ -61,15 +55,13 @@ class Manager
      * @param GiftcardApiRepositoryInterface $giftcardApiRepository
      * @param StoreManagerInterface $storeManager
      * @param Log $logger
-     * @param ManagerInterface $messageManager
      */
     public function __construct(
         GiftcardFactory $giftcardFactory,
         GiftcardRepositoryInterface $giftcardRepository,
         GiftcardApiRepositoryInterface $giftcardApiRepository,
         StoreManagerInterface $storeManager,
-        Log $logger,
-        ManagerInterface $messageManager
+        Log $logger
     )
     {
         $this->giftcardFactory = $giftcardFactory;
@@ -77,7 +69,6 @@ class Manager
         $this->logger = $logger;
         $this->giftcardApiRepository = $giftcardApiRepository;
         $this->_storeManager = $storeManager;
-        $this->_messageManager = $messageManager;
     }
 
     /**
