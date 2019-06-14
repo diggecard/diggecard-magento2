@@ -1,7 +1,7 @@
 <?php
 /**
- * @author Elogic Team
- * @copyright Copyright (c) 2019 Elogic (https://elogic.co)
+ * @author DiggEcard Team
+ * @copyright Copyright (c) 2019 DiggEcard (https://diggecard.com)
  */
 
 namespace Diggecard\Giftcard\Service;
@@ -121,7 +121,7 @@ class GiftcardSampleData
         $sku = "dg-general-giftcard".($price == 0 ? '' : '-'.$price);
         $simpleProduct->addData(array(
             'sku' => $sku,
-            'name' => "Diggecard Giftcard {$type} \$$price",
+            'name' => "Diggecard Giftcard {$type}",
             'price' => $price,
             'attribute_set_id' => $attributeSetId,
             'status' => ProductAttributeStatus::STATUS_ENABLED,
