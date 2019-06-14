@@ -1,7 +1,7 @@
 <?php
 /**
- * @author DiggEcard Team
- * @copyright Copyright (c) 2019 DiggEcard (https://diggecard.com)
+ * @author Elogic Team
+ * @copyright Copyright (c) 2019 Elogic (https://elogic.co)
  */
 
 namespace Diggecard\Giftcard\Controller\Checkout;
@@ -119,6 +119,16 @@ class Apply extends Action
         if ($this->getRequest()->isAjax()) {
             $post = $this->getRequest()->getParams();
             $qrCode = $post['qrCode'];
+            if (strlen($qrCode) == 0) {
+                $message = 'Enter Gift Card Code!';
+                $this->_messageManager->addErrorMessage(__($message));
+                $response = [
+                    'valid' => false,
+                    'error_type' => 5,
+                    'message' => 'Enter Gift Card Code!'
+                ];
+                return $result->setData($response);
+            }
             $quote = $this->checkoutSession->getQuote();
 
             $this->logger->saveLog('GiftCard validation on cart');
