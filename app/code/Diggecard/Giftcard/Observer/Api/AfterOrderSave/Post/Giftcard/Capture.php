@@ -1,7 +1,7 @@
 <?php
 /**
- * @author Elogic Team
- * @copyright Copyright (c) 2019 Elogic (https://elogic.co)
+ * @author DiggEcard Team
+ * @copyright Copyright (c) 2019 DiggEcard (https://diggecard.com)
  */
 
 namespace Diggecard\Giftcard\Observer\Api\AfterOrderSave\Post\Giftcard;
