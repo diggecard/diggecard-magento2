@@ -95,7 +95,8 @@ class CaptureValue implements ObserverInterface
                     "reservationCode" => $reserveId,  // reserve id
                     "merchantId" => "",
                     "qrCode" => (string)$giftcard->getQrCode(),
-                    "amount" => number_format(abs($quoteBaseDiscount), 2, '.', '')
+                    "amount" => number_format(abs($quoteBaseDiscount), 2, '.', ''),
+                    "totalOrderAmount" => (float)$invoice->getSubtotal()
                 ];
                 $this->logger->saveLog('Capture value');
                 $this->logger->saveLog($data);

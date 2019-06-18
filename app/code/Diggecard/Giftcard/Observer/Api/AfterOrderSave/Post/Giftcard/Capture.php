@@ -84,7 +84,8 @@ class Capture implements ObserverInterface
                         "merchantId" => "",
                         "qrCode" => $giftcard->getQrCode(),
                         "amount" => $quote->getDiggecardGiftcardBaseDiscount(),
-                        "reservationCode" => $quote->getDiggecardGiftcardReservationId()
+                        "reservationCode" => $quote->getDiggecardGiftcardReservationId(),
+                        "totalOrderAmount" => (float)$quote->getSubtotal()
                     ];
 
                     $this->giftcardApiRepository->postCaptureReservedGiftcardAmount($data);
