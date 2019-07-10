@@ -1,7 +1,7 @@
 <?php
 /**
- * @author DiggEcard Team
- * @copyright Copyright (c) 2019 DiggEcard (https://diggecard.com)
+ * @author Elogic Team
+ * @copyright Copyright (c) 2019 Elogic (https://elogic.co)
  */
 
 namespace Diggecard\Giftcard\Service;
@@ -79,7 +79,7 @@ class ImportImageService
         /** create folder if it is not exists */
         $this->file->checkAndCreateFolder($tmpDir);
         /** @var string $newFileName */
-        $newFileName = $tmpDir . baseName($imageUrl);
+        $newFileName = $tmpDir . DIRECTORY_SEPARATOR . baseName($imageUrl);
         /** read file from URL and copy it to the new destination */
         $result = $this->file->read($imageUrl, $newFileName);
 

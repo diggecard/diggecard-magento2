@@ -1,7 +1,7 @@
 <?php
 /**
- * @author DiggEcard Team
- * @copyright Copyright (c) 2019 DiggEcard (https://diggecard.com)
+ * @author Elogic Team
+ * @copyright Copyright (c) 2019 Elogic (https://elogic.co)
  */
 
 namespace Diggecard\Giftcard\Model\Product\Type;
@@ -46,6 +46,8 @@ class Giftcard extends AbstractType
         $product->addCustomOption('dg_giftcard_image', $buyRequest->getDgGiftcardImage(), $product);
         $product->addCustomOption('dg_giftcard_value', $buyRequest->getDgGiftcardValue(), $product);
         $product->addCustomOption('dg_giftcard_hash', $buyRequest->getDgGiftcardHash(), $product);
+        $product->setName($buyRequest->getName());
+        $this->productRepository->save($product);
 
         $result = parent::_prepareProduct($buyRequest, $product, $processMode);
         if (is_string($result)) {

@@ -1,7 +1,7 @@
 <?php
 /**
- * @author DiggEcard Team
- * @copyright Copyright (c) 2019 DiggEcard (https://diggecard.com)
+ * @author Elogic Team
+ * @copyright Copyright (c) 2019 Elogic (https://elogic.co)
  */
 
 namespace Diggecard\Giftcard\Controller\Giftcard;
@@ -11,11 +11,17 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Diggecard\Giftcard\Service\GiftcardSampleData as GiftcardService;
+use Diggecard\Giftcard\Service\ImportImageService as GiftcardImportImageService;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Exception\NoSuchEntityException;
-
+use Magento\Checkout\Model\Session;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Image\AdapterFactory;
+use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class addToCheckout
  *
@@ -24,6 +30,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class Add extends Action
 {
     const DG_SKU = 'dg-general-giftcard';
+    const DEFAULT_RESIZE_DIRECTORY = 'resize';
+    const DEFAULT_WIDTH = 300;
+    const DEFAULT_HEIGHT = 300;
 
     /**
      * @var JsonFactory
@@ -59,15 +68,39 @@ class Add extends Action
     private $quoteRepository;
 
     /**
+     * @var GiftcardImportImageService
+     */
+    private $giftcardImportImageService;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @var ImageFactory
+     */
+    private $imageFactory;
+
+    /**
+     * @var StoreManager
+     */
+    private $storeManager;
+
+    /**
      * Index constructor.
      * @param Context $context
      * @param JsonFactory $resultJsonFactory
      * @param GiftcardService $giftcardService
      * @param ProductRepositoryInterface $productRepository
-     * @param Log $logger
+     * @param Log $logger $filesystem = $objectManager->create('\Magento\Framework\Filesystem');
      * @param FormKey $formKey
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+     * @param Session $checkoutSession
+     * @param CartRepositoryInterface $quoteRepository
+     * @param GiftcardImportImageService $giftcardImportImageService
+     * @param Filesystem $filesystem
+     * @param AdapterFactory $imageFactory
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         Context $context,
@@ -76,8 +109,12 @@ class Add extends Action
         ProductRepositoryInterface $productRepository,
         Log $logger,
         FormKey $formKey,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+        Session $checkoutSession,
+        CartRepositoryInterface $quoteRepository,
+        GiftcardImportImageService $giftcardImportImageService,
+        Filesystem $filesystem,
+        AdapterFactory $imageFactory,
+        StoreManagerInterface $storeManager
     )
     {
         $this->resultJsonFactory = $resultJsonFactory;
@@ -87,9 +124,12 @@ class Add extends Action
         $this->logger = $logger;
         $this->checkoutSession = $checkoutSession;
         $this->quoteRepository = $quoteRepository;
+        $this->giftcardImportImageService = $giftcardImportImageService;
+        $this->filesystem = $filesystem;
+        $this->imageFactory = $imageFactory;
+        $this->storeManager = $storeManager;
         parent::__construct($context);
     }
-
 
     public function execute()
     {
@@ -97,8 +137,6 @@ class Add extends Action
             $post = $this->getRequest()->getParams();
             $quote = $this->checkoutSession->getQuote();
             if (!$quote->getDiggecardGiftcardId()) {
-
-
                 /** @var Product $product */
                 try {
                     $product = $this->productRepository->get(self::DG_SKU);
@@ -113,6 +151,13 @@ class Add extends Action
                         'dg_giftcard_value' => $post['value'],
                         'dg_giftcard_hash' => $post['hash']
                     );
+
+                    $importImage = $this->giftcardImportImageService->importImage($params['dg_giftcard_image']);
+                    $width = self::DEFAULT_WIDTH;
+                    $height = self::DEFAULT_HEIGHT;
+                    $imgResizePath = $this->imageResize(baseName($importImage['newFileName']), $width, $height, self::DEFAULT_RESIZE_DIRECTORY);
+                    $params['dg_giftcard_image'] = $imgResizePath;
+
                     if ($quote->getItemsCount() > 0) {
                         $cartItems = $quote->getAllItems();
                         foreach ($cartItems as $cartItem) {
@@ -139,4 +184,49 @@ class Add extends Action
             }
         }
     }
+
+    private function imageResize(
+        $src,
+        $width,
+        $height,
+        $dir = self::DEFAULT_RESIZE_DIRECTORY.DIRECTORY_SEPARATOR
+    )
+    {
+        $resizedURL = $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) .
+            $dir . $this->getNewDirectoryImage($src);
+
+        $absPath = $this->filesystem
+                ->getDirectoryRead(DirectoryList::MEDIA)
+                ->getAbsolutePath() . 'tmp' . DIRECTORY_SEPARATOR . $src;
+
+        $imageResized = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath($dir) .
+            $this->getNewDirectoryImage($src);
+
+        if (file_exists($imageResized)) {
+            return $resizedURL;
+        }
+
+        /** @var AdapterInterface $imageResize */
+        $imageResize = $this->imageFactory->create();
+        $imageResize->open($absPath);
+        $imageResize->backgroundColor([255, 255, 255]);
+        $imageResize->constrainOnly(true);
+        $imageResize->keepTransparency(true);
+        $imageResize->keepFrame(true);
+        $imageResize->keepAspectRatio(true);
+        $imageResize->quality('100');
+        $imageResize->resize($width, $height);
+        $dest = $imageResized;
+        $imageResize->save($dest);
+        return $resizedURL;
+    }
+
+    private function getNewDirectoryImage($src)
+    {
+        $segments = array_reverse(explode('/', $src));
+        $first_dir = substr($segments[0], 0, 1);
+        $second_dir = substr($segments[0], 1, 1);
+        return 'cache'. DIRECTORY_SEPARATOR . $first_dir . DIRECTORY_SEPARATOR . $second_dir . DIRECTORY_SEPARATOR . $segments[0];
+    }
+
 }
