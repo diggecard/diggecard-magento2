@@ -1,7 +1,7 @@
 <?php
 /**
- * @author DiggEcard Team
- * @copyright Copyright (c) 2019 DiggEcard (https://diggecard.com)
+ * @author Elogic Team
+ * @copyright Copyright (c) 2019 Elogic (https://elogic.co)
  */
 
 namespace Diggecard\Giftcard\Model\Sales\Total;
@@ -73,7 +73,7 @@ class QuoteDiscount extends AbstractTotal
             }
 
             $label = 'Diggerecard Giftcard';
-            $subtotal = (double)$total->getSubtotalInclTax() + $total->getDiscountAmount();
+            $subtotal = (double)$total->getSubtotalInclTax() + $total->getDiscountAmount() + $total->getShippingTaxAmount();
             $subtotal += $total->getShippingAmount() ? $total->getShippingAmount() : 0;
             $discountAmount = ((double)$giftCard->getValueRemains() > $subtotal) ? $subtotal : (double)$giftCard->getValueRemains();
             $discountAmount = -$discountAmount;
