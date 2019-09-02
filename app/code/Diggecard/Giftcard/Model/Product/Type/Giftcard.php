@@ -41,6 +41,17 @@ class Giftcard extends AbstractType
 
     }
 
+    /**
+     * Check is virtual product
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return bool
+     */
+    public function isVirtual($product)
+    {
+        return true;
+    }
+
     protected function _prepareProduct(DataObject $buyRequest, $product, $processMode)
     {
         $product->addCustomOption('dg_giftcard_image', $buyRequest->getDgGiftcardImage(), $product);
