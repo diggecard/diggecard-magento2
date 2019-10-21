@@ -1,0 +1,21 @@
+<div class="totals diggecard-giftcard excl">
+
+    <div id="giftcard-add" data-bind="visible: !giftcardValid()">
+        <label for="giftcard_code" class="label" data-bind="text: 'Giftcard Code'"></label>
+        <input id="giftcard_code" name="giftcard_code" class="price" data-bind="value: getGiftcardDefaultCode()"/>
+        <button class="primary update-total" data-bind="click: setDiscountValue">Update</button>
+        <div class="giftcard-invalid" data-bind="visible: qrInvalidError">This QR Code is invalid!</div>
+        <div class="giftcard-invalid" data-bind="visible: cardViaCardError">Cannot purchase Gift Card via Gift Card!</div>
+        <div class="giftcard-invalid" data-bind="visible: emptyGiftCard">Gift Card is empty!</div>
+        <div class="giftcard-invalid" data-bind="visible: noSuchGiftCard">No such Gift Card!</div>
+        <div class="giftcard-invalid" data-bind="visible: noGiftCardEntered">Enter Gift Card Code!</div>
+    </div>
+
+    <div id="giftcard-info" data-bind="visible: giftcardValid">
+        <span class="label">Gift Card:</span>
+        <div class="label qr_code" data-bind="text: 'QR Code: ' + getGiftcardQrCode()"></div>
+        <div class="label currency_code value_remains" data-bind="text: 'Value Remains: ' + getCurrentCurrency() + ' ' + getGiftcardValueRemains()"></div>
+        <button class="primary update-total" data-bind="click: removeGiftcardDiscount">Cancel</button>
+    </div>
+
+</div>

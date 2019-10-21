@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!--        /**-->
+<!--        * @author DiggEcard Team-->
+<!--        * @copyright Copyright (c) 2019 DiggEcard (https://diggecard.com)-->
+<!--        */-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
+    <extension_attributes for="Magento\Checkout\Model\Cart\CartInterface">
+        <attribute code="diggecard_discount" type="Diggecard\Giftcard\Api\Data\DiscountInterface" />
+    </extension_attributes>
+</config>
