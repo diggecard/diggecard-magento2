@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!--        /**-->
+<!--        * @author DiggEcard Team-->
+<!--        * @copyright Copyright (c) 2019 DiggEcard (https://diggecard.com)-->
+<!--        */-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <referenceContainer name="content">
+        <referenceBlock name="page.main.title" remove="true"/>
+        <block class="Diggecard\Giftcard\Block\Giftcard\Index" name="diggecard_giftcard_index" template="Diggecard_Giftcard::giftcard/index.phtml" />
+    </referenceContainer>
+</page>

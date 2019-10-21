@@ -1,0 +1,30 @@
+<?php
+/**
+ * @author DiggEcard Team
+ * @copyright Copyright (c) 2019 DiggEcard (https://diggecard.com)
+ */
+?>
+
+<?php /** @var \Diggecard\Giftcard\Block\Giftcard\Index $block */ ?>
+<h1><?php echo $block->getHeading()?></h1>
+
+<iframe id="diggecard-giftcard-iframe" allow="camera; microphone" src="<?php echo $block->getIframeSrc()?>" scrolling="no">
+</iframe>
+
+<script type="text/x-magento-init">
+{
+    "*": {
+        "giftcardIframePostMessageListener": {}
+    }
+}
+</script>
+
+<script>
+    var iframe = document.getElementById('diggecard-giftcard-iframe');
+    window.addEventListener("message", receiveMessage, false);
+    function receiveMessage(event) {
+        if (event.data.height) {
+            iframe.setAttribute('height', event.data.height);
+        }
+    }
+</script>

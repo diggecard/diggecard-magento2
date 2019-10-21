@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--        /**-->
+<!--        * @author DiggEcard Team-->
+<!--        * @copyright Copyright (c) 2019 DiggEcard (https://diggecard.com)-->
+<!--        */-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+      <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="diggecard_giftcard_payment_config_provider" xsi:type="object">Diggecard\Giftcard\Model\GiftcardConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Checkout\CustomerData\AbstractItem">
+        <plugin name="Diggecard_Giftcard_Minicart_Image" type="Diggecard\Giftcard\Plugin\Cart\MinicartImage" sortOrder="1"/>
+    </type>
+
+    <type name="Magento\Checkout\Block\Cart\Item\Renderer">
+        <plugin name="Diggecard_Giftcard_Cart_Image" type="Diggecard\Giftcard\Plugin\Cart\CartImage" sortOrder="1"/>
+    </type>
+
+</config>

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--        /**-->
+<!--        * @author DiggEcard Team-->
+<!--        * @copyright Copyright (c) 2019 DiggEcard (https://diggecard.com)-->
+<!--        */-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <diggecard>
+            <giftcard>
+                <active>0</active>
+                <time_to_reserve>60</time_to_reserve>
+                <heading>There is Diggecard Page...</heading>
+            </giftcard>
+        </diggecard>
+    </default>
+</config>
