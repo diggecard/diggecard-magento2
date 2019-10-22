@@ -12,6 +12,7 @@ use Diggecard\Giftcard\Helper\Log;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Diggecard\Giftcard\Model\Config;
@@ -72,8 +73,8 @@ class ReserveValue implements ObserverInterface
     /**
      * @param Observer $observer
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function execute(Observer $observer)
     {
@@ -87,7 +88,7 @@ class ReserveValue implements ObserverInterface
             $quote = $this->quoteRepository->get($quoteId);
             $giftcardId = $quote->getDiggecardGiftcardId();
             $timeToReserve = $this->config->getTimeToReserve();
-            if($giftcardId){
+            if ($giftcardId) {
                 $giftcard = $this->giftcardRepository->get($giftcardId);
                 $quoteDiscount = $quote->getDiggecardGiftcardDiscount();
                 $quoteBaseDiscount = $quote->getDiggecardGiftcardBaseDiscount();
@@ -95,14 +96,14 @@ class ReserveValue implements ObserverInterface
                     "minutesToReserve" => $timeToReserve,
                     "merchantId" => "",
                     "qrCode" => (string)$giftcard->getQrCode(),
-                    "amount" => number_format(abs($quoteBaseDiscount),2,'.','')
+                    "amount" => number_format(abs($quoteBaseDiscount), 2, '.', '')
                 ];
-                $this->logger->saveLog('Reserve value');
+                $this->logger->saveLog(__('Reserve value'));
                 $this->logger->saveLog($data);
                 $result = $this->giftcardApiRepository->postReserveGiftcardAmount($data);
-                $this->logger->saveLog('RESULT:');
+                $this->logger->saveLog(__('RESULT:'));
                 $this->logger->saveLog($result);
-                if(isset($result['validationErrors'])){
+                if (isset($result['validationErrors'])) {
                     $errors = $result['validationErrors'];
                     $message = isset($errors['amount']) ? $errors['amount'] : "Cannot use gift card right now";
                     throw new LocalizedException(

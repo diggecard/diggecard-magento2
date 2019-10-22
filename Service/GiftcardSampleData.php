@@ -85,14 +85,6 @@ class GiftcardSampleData
     {
         try {
             $this->state->setAreaCode(Area::AREA_ADMINHTML);
-//            $products = [];
-//            $products[] = $this->createSimpleGiftcard(20, 10);
-//            $products[] = $this->createSimpleGiftcard(50, 10);
-//            $products[] = $this->createSimpleGiftcard(100, 10);
-//            $products[] = $this->createSimpleGiftcard(20, 10, 0);
-//            $products[] = $this->createSimpleGiftcard(50, 10, 0);
-//            $products[] = $this->createSimpleGiftcard(100, 10, 0);
-//            return $products;
             $this->createSimpleGiftcard(0, 10);
         } catch (Exception $exception) {
             return false;
@@ -104,21 +96,19 @@ class GiftcardSampleData
      * @param int $qty
      * @param int $weight
      * @param null $imagePath
-     * @return ProductInterface
-     * @throws CouldNotSaveException
-     * @throws InputException
-     * @throws StateException
+     * @return mixed
+     * @throws Exception
      */
     public function createSimpleGiftcard($price = 0, $qty = 0, $weight = 0, $imagePath = null)
     {
         $attributeSetId = $this->productModel->getDefaultAttributeSetId();
-        $type = $weight == 0 ? 'Virtual' : 'Physical'; //virtual or physical
+        $type = $weight == 0 ? 'Virtual' : 'Physical';
         $skuTypeCode = strtolower($type[0]);
         $simpleProduct = $this->productFactory->create();
         $simpleProduct->setStoreId(Store::DEFAULT_STORE_ID);
         $simpleProduct->setWebsiteIds([$this->storeManager->getDefaultStoreView()->getWebsiteId()]);
         $simpleProduct->setTypeId($this->giftcardType);
-        $sku = "dg-general-giftcard".($price == 0 ? '' : '-'.$price);
+        $sku = "dg-general-giftcard" . ($price == 0 ? '' : '-' . $price);
         $simpleProduct->addData(array(
             'sku' => $sku,
             'name' => "Diggecard Giftcard {$type}",
@@ -129,8 +119,8 @@ class GiftcardSampleData
             'weight' => $weight,
             'product_has_weight' => $weight == 0 ? 0 : 1,
             'tax_class_id' => 0,
-            'description' => 'Diggecard Giftcard Sample Product',
-            'short_description' => 'Diggecard Giftcard Sample Product',
+            'description' => __('Diggecard Giftcard Sample Product'),
+            'short_description' => __('Diggecard Giftcard Sample Product'),
             'stock_data' => array(
                 'use_config_manage_stock' => 0,
                 'manage_stock' => 1,

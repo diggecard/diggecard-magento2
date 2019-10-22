@@ -28,7 +28,8 @@ class CanEditQty
      */
     public function __construct(
         CartRepositoryInterface $cartRepository
-    ) {
+    )
+    {
         $this->cartRepository = $cartRepository;
     }
 
@@ -40,7 +41,8 @@ class CanEditQty
     public function afterCanEditQty(
         Items $subject,
         $result
-    ) {
+    )
+    {
         $quoteId = $subject->getOrder()->getQuoteId();
         try {
             $quote = $this->cartRepository->get($quoteId);

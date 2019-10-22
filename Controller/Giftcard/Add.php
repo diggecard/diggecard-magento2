@@ -18,10 +18,12 @@ use Diggecard\Giftcard\Service\ImportImageService as GiftcardImportImageService;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Checkout\Model\Session;
+use Magento\Framework\UrlInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Image\AdapterFactory;
 use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * Class addToCheckout
  *
@@ -59,11 +61,11 @@ class Add extends Action
     private $logger;
 
     /**
-     * @var \Magento\Checkout\Model\Session
+     * @var Session
      */
     protected $checkoutSession;
     /**
-     * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @var CartRepositoryInterface
      */
     private $quoteRepository;
 
@@ -176,7 +178,7 @@ class Add extends Action
                     }
                     $this->_forward('add', 'cart', "checkout", $params);
                 } catch (NoSuchEntityException $e) {
-                    $this->logger->saveLog(__FILE__ . ' cannot find GC product', Log::TYPE_EXCEPTION);
+                    $this->logger->saveLog(__FILE__ . __(' cannot find GC product'), Log::TYPE_EXCEPTION);
                     $this->messageManager->addErrorMessage(__('Cannot add GiftCard to cart'));
                 }
             } else {
@@ -189,10 +191,10 @@ class Add extends Action
         $src,
         $width,
         $height,
-        $dir = self::DEFAULT_RESIZE_DIRECTORY.DIRECTORY_SEPARATOR
+        $dir = self::DEFAULT_RESIZE_DIRECTORY . DIRECTORY_SEPARATOR
     )
     {
-        $resizedURL = $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) .
+        $resizedURL = $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) .
             $dir . $this->getNewDirectoryImage($src);
 
         $absPath = $this->filesystem
@@ -226,7 +228,7 @@ class Add extends Action
         $segments = array_reverse(explode('/', $src));
         $first_dir = substr($segments[0], 0, 1);
         $second_dir = substr($segments[0], 1, 1);
-        return 'cache'. DIRECTORY_SEPARATOR . $first_dir . DIRECTORY_SEPARATOR . $second_dir . DIRECTORY_SEPARATOR . $segments[0];
+        return 'cache' . DIRECTORY_SEPARATOR . $first_dir . DIRECTORY_SEPARATOR . $second_dir . DIRECTORY_SEPARATOR . $segments[0];
     }
 
 }

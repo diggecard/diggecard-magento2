@@ -10,6 +10,7 @@ use Diggecard\Giftcard\Api\GiftcardRepositoryInterface;
 use Diggecard\Giftcard\Api\Data\GiftcardInterface;
 use Diggecard\Giftcard\Helper\Log;
 use Diggecard\Giftcard\Model\GiftcardFactory;
+use Exception;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 use Diggecard\Giftcard\Api\GiftcardApiRepositoryInterface;
@@ -81,7 +82,7 @@ class Manager
         try {
             /** @var GiftcardInterface $remoteGiftcard */
             $remoteGiftcard = $this->giftcardApiRepository->getGiftCardByQrCode($qrCode);
-            $this->logger->saveLog('Validate GiftCard:');
+            $this->logger->saveLog(__('Validate GiftCard:'));
             $this->logger->saveLog($remoteGiftcard);
             $currentCurrencyCode = $this->_storeManager->getStore()->getCurrentCurrency()->getCode();
             $baseCurrencyCode = $this->_storeManager->getStore()->getBaseCurrency()->getCode();
@@ -90,16 +91,15 @@ class Manager
                     $localGiftcard = $this->giftcardRepository->getByQrCode($qrCode);
                     if (($baseCurrencyCode == $currentCurrencyCode) && ($remoteGiftcard['currencyCode'] == $currentCurrencyCode)) {
                         if ($localGiftcard->getEntityId()) {
-                            // todo update local cardData
                             $localGiftcard->setValueRemains($remoteGiftcard['valueRemains']);
                             return $this->giftcardRepository->save($localGiftcard);
                         }
                     } else {
-                        $message = 'Cannot convert currency!';
-                        $this->_messageManager->addErrorMessage(__($message));
+                        $message = __('Cannot convert currency!');
+                        $this->_messageManager->addErrorMessage($message);
                     }
                 } catch (NoSuchEntityException $exception) {
-                    $this->logger->saveLog('Creating new GC');
+                    $this->logger->saveLog(__('Creating new GC'));
                     $newGiftCard = $this->giftcardFactory->create();
                     $newGiftCard->setQrCode($remoteGiftcard['qrCode']);
                     $newGiftCard->setValueRemains($remoteGiftcard['valueRemains']);
@@ -108,9 +108,9 @@ class Manager
                     return $this->giftcardRepository->save($newGiftCard);
                 };
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->saveLog(
-                __FILE__.' There is no card with QrCode: "' . $qrCode.'" '.$e->getMessage()
+                __FILE__ . __(' There is no card with QrCode:') . ' "' . $qrCode . '" ' . $e->getMessage()
                 , Log::TYPE_EXCEPTION);
             return false;
         }

@@ -11,6 +11,8 @@ use Magento\Framework\HTTP\Client\Curl;
 use Diggecard\Giftcard\Helper\Data as Json;
 use Diggecard\Giftcard\Model\Config;
 use Magento\Framework\HTTP\Adapter\CurlFactory;
+use Zend_Http_Client;
+use Zend_Http_Response;
 
 /**
  * Class GiftcardApi
@@ -50,7 +52,8 @@ class GiftcardApi implements GiftcardApiInterface
         CurlFactory $curlFactory,
         Json $json,
         Config $config
-    ) {
+    )
+    {
         $this->json = $json;
         $this->config = $config;
         $this->curlFactory = $curlFactory;
@@ -63,18 +66,19 @@ class GiftcardApi implements GiftcardApiInterface
     {
         if ($param) {
             return sprintf($this->config->getApiUrl()
-                .$this->config->getApiContent()
-                .$method);
+                . $this->config->getApiContent()
+                . $method);
         }
         return $this->config->getApiUrl()
-            .$this->config->getApiContent()
-            .$method;
+            . $this->config->getApiContent()
+            . $method;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function prepareHeaders($headers = null){
+    public function prepareHeaders($headers = null)
+    {
         $headers = $headers ?: ["Content-Type" => "application/json", "Authorization" => $this->config->getAuthorization()];
         return $headers;
     }
@@ -82,16 +86,17 @@ class GiftcardApi implements GiftcardApiInterface
     /**
      * {@inheritDoc}
      */
-    public function get($method, $data) {
+    public function get($method, $data)
+    {
         $httpAdapter = $this->curlFactory->create();
         $url = $this->getMethodUrl($method);
-        $authorization =  "Authorization: ".$this->config->getAuthorization();
-        $httpAdapter->write(\Zend_Http_Client::GET,
-            $url.$data,
+        $authorization = "Authorization: " . $this->config->getAuthorization();
+        $httpAdapter->write(Zend_Http_Client::GET,
+            $url . $data,
             '1.1',
             ["Content-Type:application/json", $authorization]);
         $result = $httpAdapter->read();
-        $body = \Zend_Http_Response::extractBody($result);
+        $body = Zend_Http_Response::extractBody($result);
         $response = $this->json->unserialize($body);
         return $response;
     }
@@ -99,17 +104,18 @@ class GiftcardApi implements GiftcardApiInterface
     /**
      * {@inheritDoc}
      */
-    public function post($method, $data) {
+    public function post($method, $data)
+    {
         $httpAdapter = $this->curlFactory->create();
         $url = $this->getMethodUrl($method);
-        $authorization =  "Authorization: ".$this->config->getAuthorization();
-        $httpAdapter->write(\Zend_Http_Client::POST,
+        $authorization = "Authorization: " . $this->config->getAuthorization();
+        $httpAdapter->write(Zend_Http_Client::POST,
             $url,
             '1.1',
             ["Content-Type:application/json", $authorization],
             \Zend\Json\Json::encode($data));
         $result = $httpAdapter->read();
-        $body = \Zend_Http_Response::extractBody($result);
+        $body = Zend_Http_Response::extractBody($result);
         $response = $this->json->unserialize($body);
         return $response;
     }

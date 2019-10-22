@@ -11,6 +11,7 @@ use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
 use Diggecard\Giftcard\Model\Product\Type\Giftcard;
+use Magento\Quote\Api\Data\ProductOptionExtensionFactory;
 use Magento\Quote\Api\Data\ProductOptionInterface;
 use Magento\Quote\Api\Data\ProductOptionInterfaceFactory;
 
@@ -33,7 +34,7 @@ class CustomPrice implements ObserverInterface
     protected $productOptionInterfaceFactory;
 
     /**
-     * @var \Magento\Quote\Api\Data\ProductOptionExtensionFactory
+     * @var ProductOptionExtensionFactory
      */
     protected $extensionFactory;
 
@@ -41,13 +42,14 @@ class CustomPrice implements ObserverInterface
      * CustomPrice constructor.
      * @param CustomOptionFactory $customOptionFactory
      * @param ProductOptionInterfaceFactory $productOptionInterfaceFactory
-     * @param \Magento\Quote\Api\Data\ProductOptionExtensionFactory $extensionFactory
+     * @param ProductOptionExtensionFactory $extensionFactory
      */
     public function __construct(
         CustomOptionFactory $customOptionFactory,
         ProductOptionInterfaceFactory $productOptionInterfaceFactory,
-        \Magento\Quote\Api\Data\ProductOptionExtensionFactory $extensionFactory
-    ) {
+        ProductOptionExtensionFactory $extensionFactory
+    )
+    {
         $this->customOptionFactory = $customOptionFactory;
         $this->productOptionInterfaceFactory = $productOptionInterfaceFactory;
         $this->extensionFactory = $extensionFactory;
@@ -56,7 +58,8 @@ class CustomPrice implements ObserverInterface
     /**
      * @param Observer $observer
      */
-    public function execute(Observer $observer) {
+    public function execute(Observer $observer)
+    {
         /** @var CartItemInterface $item */
         $item = $observer->getEvent()->getData('quote_item');
         $product = $observer->getEvent()->getData('product');
@@ -80,7 +83,8 @@ class CustomPrice implements ObserverInterface
      * @param $productCustomOptions
      * @return array
      */
-    private function getCustomOptionData($productCustomOptions) {
+    private function getCustomOptionData($productCustomOptions)
+    {
         $keys = ['dg_giftcard_image', 'dg_giftcard_value', 'dg_giftcard_hash'];
         $options = [];
         foreach ($keys as $key) {
@@ -105,7 +109,8 @@ class CustomPrice implements ObserverInterface
      * @param array $optionData
      * @return ProductOptionInterface
      */
-    private function setProductOptionExtensionAttribute($productOption, $optionData) {
+    private function setProductOptionExtensionAttribute($productOption, $optionData)
+    {
         $extAttribute = $productOption->getExtensionAttributes()
             ? $productOption->getExtensionAttributes()
             : $this->extensionFactory->create();

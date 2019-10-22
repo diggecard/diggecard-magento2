@@ -38,7 +38,8 @@ class GiftcardConfigProvider implements ConfigProviderInterface
         CheckoutSession $checkoutSession,
         GiftcardRepositoryInterface $giftcardRepository,
         StoreManagerInterface $storeManager
-    ) {
+    )
+    {
         $this->checkoutSession = $checkoutSession;
         $this->giftcardRepository = $giftcardRepository;
         $this->_storeManager = $storeManager;

@@ -28,7 +28,8 @@ class OrderApiRepository extends GiftcardApi implements OrderApiRepositoryInterf
         CurlFactory $curlFactory,
         Json $json,
         Config $config
-    ) {
+    )
+    {
         parent::__construct(
             $curlFactory,
             $json,

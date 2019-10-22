@@ -6,6 +6,8 @@
 
 namespace Diggecard\Giftcard\Model\Sales\Total;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -53,8 +55,8 @@ class QuoteDiscount extends AbstractTotal
      * @param ShippingAssignmentInterface $shippingAssignment
      * @param Total $total
      * @return $this|Total\AbstractTotal
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function collect(
         Quote $quote,
@@ -72,7 +74,7 @@ class QuoteDiscount extends AbstractTotal
                 return $this;
             }
 
-            $label = 'Diggerecard Giftcard';
+            $label = __('Diggerecard Giftcard');
             $subtotal = (double)$total->getSubtotalInclTax() + $total->getDiscountAmount() + $total->getShippingTaxAmount();
             $subtotal += $total->getShippingAmount() ? $total->getShippingAmount() : 0;
             $discountAmount = ((double)$giftCard->getValueRemains() > $subtotal) ? $subtotal : (double)$giftCard->getValueRemains();
@@ -91,14 +93,13 @@ class QuoteDiscount extends AbstractTotal
             if ($total->getDiscountAmount()) {
                 // If a discount exists in cart and another discount is applied, the add both discounts.
                 $discountAmount = $total->getDiscountAmount() + $discountAmount;
-                $label = $total->getDiscountDescription() ? $total->getDiscountDescription() : 'Store Discount, ' . $label;
+                $label = $total->getDiscountDescription() ? $total->getDiscountDescription() : __('Store Discount, ') . $label;
             }
 
             $total->setDiscountDescription($label);
             $total->setDiscountAmount($discountAmount);
             $total->setBaseDiscountAmount($discountAmount);
         }
-
 
         return $this;
     }

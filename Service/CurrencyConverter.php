@@ -67,7 +67,7 @@ class CurrencyConverter
      */
     public function convertPrice($price, $codeFrom, $codeTo)
     {
-        if($codeFrom != $codeTo) {
+        if ($codeFrom != $codeTo) {
             $rate = $this->currencyFactory->create()->load($codeFrom)->getAnyRate($codeTo);
             $returnValue = $price * $rate;
             return $returnValue;
@@ -85,7 +85,7 @@ class CurrencyConverter
         $codeFrom = $this->getCurrentCurrecny();
         $codeTo = $this->getBaseCurrency();
 
-        if($codeFrom !== $codeTo) {
+        if ($codeFrom !== $codeTo) {
             $rate = $this->currencyFactory->create()->load($codeFrom)->getAnyRate($codeTo);
             $returnValue = $price * $rate;
             return $returnValue;

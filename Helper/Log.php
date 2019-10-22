@@ -7,6 +7,9 @@
 namespace Diggecard\Giftcard\Helper;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
 
 /**
  * Class Log
@@ -44,10 +47,10 @@ class Log
     public function saveLog($message, $type = self::TYPE_INFO)
     {
         $path = 'diggecard/giftcard/enable_logging';
-        $value = $this->scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $value = $this->scopeConfig->getValue($path, ScopeInterface::SCOPE_STORE);
         if ($value) {
-            $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/Diggecard_giftcard.log');
-            $logger = new \Zend\Log\Logger();
+            $writer = new Stream(BP . '/var/log/Diggecard_giftcard.log');
+            $logger = new Logger();
             $logger->addWriter($writer);
             $logger->debug('=====================================================================================');
             switch ($type) {

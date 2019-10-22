@@ -6,7 +6,6 @@
 
 namespace Diggecard\Giftcard\Model\Sales\Total;
 
-use Diggecard\Giftcard\Model\Product\Price;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Sales\Model\Order\Invoice as ModelInvoice;
 use Magento\Sales\Model\Order\Invoice\Total\AbstractTotal;
@@ -54,7 +53,8 @@ class InvoiceDiscount extends AbstractTotal
         GiftcardRepositoryInterface $giftcardRepository,
         CurrencyConverter $currencyConverter,
         $data = []
-    ) {
+    )
+    {
         parent::__construct($data);
         $this->dataObjectHelper = $dataObjectHelper;
         $this->cartRepository = $cartRepository;
@@ -74,9 +74,9 @@ class InvoiceDiscount extends AbstractTotal
         $invoiceGrandTotal = $invoice->getGrandTotal();
         $baseGrandInvoiceTotal = $invoice->getBaseGrandTotal();
 
-        if ($quote->getDiggecardGiftcardDiscount()){
+        if ($quote->getDiggecardGiftcardDiscount()) {
 
-            $label = 'Diggerecard Giftcard';
+            $label = __('Diggerecard Giftcard');
 
             $giftcardDiscountValue = -$quote->getDiggecardGiftcardDiscount();
             $baseGiftcardDiscountValue = $this->currencyConverter->convertToBaseCurrency($giftcardDiscountValue);
@@ -96,19 +96,19 @@ class InvoiceDiscount extends AbstractTotal
                         $totalGiftcardDiscountInvoiced += $previousInvoice->getDiggecardGiftcardDiscount();
                         $baseTotalGiftcardDiscountInvoiced = $this->currencyConverter->convertToBaseCurrency($totalGiftcardDiscountInvoiced);
 
-                        if($totalDiscountDescription = $invoice->getDiscountDescription()) {
-                            $prevLabels = $totalDiscountDescription.', ';
+                        if ($totalDiscountDescription = $invoice->getDiscountDescription()) {
+                            $prevLabels = $totalDiscountDescription . ', ';
                         }
                     }
                 }
 
-                $label = $prevLabels.$label;
+                $label = $prevLabels . $label;
             }
 
-            $notInvoicedGiftcardValue = $giftcardDiscountValue - $totalGiftcardDiscountInvoiced; //check for discount value to use
+            $notInvoicedGiftcardValue = $giftcardDiscountValue - $totalGiftcardDiscountInvoiced;
             $baseNotInvoicedGiftcardValue = $baseGiftcardDiscountValue - $baseTotalGiftcardDiscountInvoiced;
 
-            if ($notInvoicedGiftcardValue > 0) { //if it exist (greater then zero)
+            if ($notInvoicedGiftcardValue > 0) {
                 if ($notInvoicedGiftcardValue >= $invoiceGrandTotal) {
                     $totalDiscountAmountGiftcard = $invoiceGrandTotal;
                     $baseTotalDiscountAmountGiftcard = $baseGrandInvoiceTotal;

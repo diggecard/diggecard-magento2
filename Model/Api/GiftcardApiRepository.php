@@ -28,7 +28,8 @@ class GiftcardApiRepository extends GiftcardApi implements GiftcardApiRepository
         CurlFactory $curlFactory,
         Json $json,
         Config $config
-    ) {
+    )
+    {
         parent::__construct(
             $curlFactory,
             $json,
