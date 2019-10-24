@@ -11,9 +11,6 @@ define(
     ],
     function ($, ko, Component, quote, url, getTotalsAction, customerData, getPaymentInformationAction) {
         "use strict";
-
-
-
         return Component.extend({
             giftcardValid: ko.observable(false),
             diggecardIsEnable: ko.observable(window.checkoutConfig.diggecard.isEnable),
