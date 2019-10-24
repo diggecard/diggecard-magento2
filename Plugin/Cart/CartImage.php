@@ -26,13 +26,13 @@ class CartImage
      */
     public function afterGetImage($rendererItem, $result)
     {
-        /** @var CartItemInterface  $item */
+        /** @var CartItemInterface $item */
         $item = $rendererItem->getItem();
         $productType = $item->getProductType();
-        if($productType == Giftcard::TYPE_CODE) {
+        if ($productType == Giftcard::TYPE_CODE) {
             /** @var Option $imageUrl */
             $imageUrl = $item->getOptionByCode('dg_giftcard_image');
-            if ($imageUrl){
+            if ($imageUrl) {
                 $result->setImageUrl($imageUrl->getValue());
             }
         }

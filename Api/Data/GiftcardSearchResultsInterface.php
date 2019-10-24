@@ -3,9 +3,7 @@
  * @author DiggEcard Team
  * @copyright Copyright (c) 2019 DiggEcard (https://diggecard.com)
  */
-
 namespace Diggecard\Giftcard\Api\Data;
-
 /**
  * Interface GiftcardSearchResultsInterface
  *
@@ -19,7 +17,6 @@ interface GiftcardSearchResultsInterface extends \Magento\Framework\Api\SearchRe
      * @return \Diggecard\Giftcard\Api\Data\GiftcardInterface[]
      */
     public function getItems();
-
     /**
      * Set list.
      *

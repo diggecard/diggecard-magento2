@@ -12,6 +12,8 @@ use Diggecard\Giftcard\Helper\Log;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Model\Order\Invoice;
 
@@ -37,7 +39,7 @@ class CaptureValue implements ObserverInterface
      */
     protected $giftcardApiRepository;
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
+     * @var ManagerInterface
      */
     private $messageManager;
     /**
@@ -50,14 +52,14 @@ class CaptureValue implements ObserverInterface
      * @param CartRepositoryInterface $quoteRepository
      * @param GiftcardRepositoryInterface $giftcardRepository
      * @param GiftcardApiRepositoryInterface $giftcardApiRepository
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param ManagerInterface $messageManager
      * @param Log $logger
      */
     public function __construct(
         CartRepositoryInterface $quoteRepository,
         GiftcardRepositoryInterface $giftcardRepository,
         GiftcardApiRepositoryInterface $giftcardApiRepository,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
+        ManagerInterface $messageManager,
         Log $logger
     )
     {
@@ -71,17 +73,17 @@ class CaptureValue implements ObserverInterface
     /**
      * @param Observer $observer
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function execute(Observer $observer)
     {
         /**
-         * @var \Magento\Sales\Model\Order\Invoice $invoice
+         * @var Invoice $invoice
          */
         $invoice = $observer->getEvent()->getInvoice();
         if ($invoice->getId() && $invoice->getState() == Invoice::STATE_PAID) {
-            $this->logger->saveLog('Capture observer');
+            $this->logger->saveLog(__('Capture observer'));
             $salesOrder = $invoice->getOrder();
             $quoteId = $salesOrder->getQuoteId();
             $quote = $this->quoteRepository->get($quoteId);
@@ -98,7 +100,7 @@ class CaptureValue implements ObserverInterface
                     "amount" => number_format(abs($quoteBaseDiscount), 2, '.', ''),
                     "totalOrderAmount" => (float)$invoice->getSubtotal()
                 ];
-                $this->logger->saveLog('Capture value');
+                $this->logger->saveLog(__('Capture value'));
                 $this->logger->saveLog($data);
                 $result = $this->giftcardApiRepository->postCaptureReservedGiftcardAmount($data);
                 $this->logger->saveLog($result);

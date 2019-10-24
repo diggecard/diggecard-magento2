@@ -27,7 +27,7 @@ class MinicartImage
     {
         $productType = $item->getProductType();
         $result = $proceed($item);
-        if($productType == Giftcard::TYPE_CODE) {
+        if ($productType == Giftcard::TYPE_CODE) {
             /** @var Option $imageUrl */
             $imageUrl = $item->getOptionByCode('dg_giftcard_image');
             if ($imageUrl) {

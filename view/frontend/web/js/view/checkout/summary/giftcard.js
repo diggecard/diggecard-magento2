@@ -11,8 +11,12 @@ define(
     ],
     function ($, ko, Component, quote, url, getTotalsAction, customerData, getPaymentInformationAction) {
         "use strict";
+
+
+
         return Component.extend({
             giftcardValid: ko.observable(false),
+            diggecardIsEnable: ko.observable(window.checkoutConfig.diggecard.isEnable),
             giftcardQrCode: ko.observable(window.checkoutConfig.diggecard.giftcard.qrCode),
             giftcardValueRemains: ko.observable(window.checkoutConfig.diggecard.giftcard.valueRemains),
             currentCurrency: ko.observable(window.checkoutConfig.diggecard.giftcard.currencyCode),
@@ -29,7 +33,6 @@ define(
             initialize: function(){
                 var self = this;
                 self._super();
-                console.log(self.giftcardValid());
                 self.giftcardValid(self.giftcardQrCode() !== undefined);
             },
 

@@ -8,6 +8,7 @@ namespace Diggecard\Giftcard\Plugin\Quote;
 
 use Diggecard\Giftcard\Helper\Data as Json;
 use Closure;
+use Exception;
 use Magento\Quote\Model\Quote\Item\ToOrderItem;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Sales\Model\Order\Item;
@@ -29,8 +30,9 @@ class ConvertToOrder
      * @param Json $json
      */
     public function __construct(
-      Json $json
-    ) {
+        Json $json
+    )
+    {
         $this->json = $json;
     }
 
@@ -46,7 +48,8 @@ class ConvertToOrder
         Closure $proceed,
         AbstractItem $item,
         $additional = []
-    ) {
+    )
+    {
         /** @var $orderItem Item */
         $orderItem = $proceed($item, $additional);
         $keys = [
@@ -60,10 +63,10 @@ class ConvertToOrder
         if (is_array($item->getOptions())) {
             foreach ($item->getOptions() as $key => $itemOption) {
                 if ($itemOption->getCode() == 'info_buyRequest' && $options = $itemOption->getValue()) {
-                    try{
-                        $customOptions =  $this->json->unserialize($options);
-                    } catch (\Exception $e) {
-                        $customOptions =  unserialize($options);
+                    try {
+                        $customOptions = $this->json->unserialize($options);
+                    } catch (Exception $e) {
+                        $customOptions = unserialize($options);
                     }
                 }
             }

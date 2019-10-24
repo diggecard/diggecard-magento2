@@ -59,10 +59,10 @@ class Config
      */
     public function getAuthorization()
     {
-        return 'DiggApiKey '.$this->scopeConfig->getValue(
-            self::XML_PATH_API_KEY,
-            ScopeInterface::SCOPE_WEBSITE
-        );
+        return 'DiggApiKey ' . $this->scopeConfig->getValue(
+                self::XML_PATH_API_KEY,
+                ScopeInterface::SCOPE_WEBSITE
+            );
     }
 
     /**

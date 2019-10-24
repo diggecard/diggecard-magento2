@@ -19,5 +19,4 @@
     <type name="Magento\Checkout\Block\Cart\Item\Renderer">
         <plugin name="Diggecard_Giftcard_Cart_Image" type="Diggecard\Giftcard\Plugin\Cart\CartImage" sortOrder="1"/>
     </type>
-
 </config>

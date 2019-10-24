@@ -13,7 +13,6 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Catalog\Model\Product;
-use Diggecard\Giftcard\Model\Product\Type\Giftcard as GiftcardType;
 use Diggecard\Giftcard\Service\GiftcardSampleData;
 use Magento\Quote\Setup\QuoteSetupFactory;
 use Magento\Sales\Setup\SalesSetupFactory;
@@ -58,7 +57,8 @@ class InstallData implements InstallDataInterface
         QuoteSetupFactory $quoteSetupFactory,
         SalesSetupFactory $salesSetupFactory
 
-    ) {
+    )
+    {
         $this->eavSetupFactory = $eavSetupFactory;
         $this->giftcardSampleData = $giftcardSampleData;
         $this->quoteSetupFactory = $quoteSetupFactory;
