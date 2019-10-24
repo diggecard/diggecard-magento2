@@ -6,6 +6,7 @@
 ?>
 
 <?php /** @var \Diggecard\Giftcard\Block\Giftcard\Index $block */ ?>
+<?php if ($block->isEnable()): ?>
 <h1><?php echo $block->getHeading()?></h1>
 
 <iframe id="diggecard-giftcard-iframe" allow="camera; microphone" src="<?php echo $block->getIframeSrc()?>" scrolling="no">
@@ -28,3 +29,4 @@
         }
     }
 </script>
+<?php endif; ?>

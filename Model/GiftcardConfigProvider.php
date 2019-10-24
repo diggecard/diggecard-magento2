@@ -9,6 +9,8 @@ namespace Diggecard\Giftcard\Model;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Diggecard\Giftcard\Api\GiftcardRepositoryInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -18,6 +20,8 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class GiftcardConfigProvider implements ConfigProviderInterface
 {
+    const XML_MODULE_STATUS_PATH = 'diggecard/giftcard/active';
+
     /**
      * @var CheckoutSession
      */
@@ -33,16 +37,21 @@ class GiftcardConfigProvider implements ConfigProviderInterface
      */
     protected $_storeManager;
 
+    /** @var ScopeConfigInterface */
+    protected $_scopeConfig;
+
 
     public function __construct(
         CheckoutSession $checkoutSession,
         GiftcardRepositoryInterface $giftcardRepository,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        ScopeConfigInterface $scopeConfig
     )
     {
         $this->checkoutSession = $checkoutSession;
         $this->giftcardRepository = $giftcardRepository;
         $this->_storeManager = $storeManager;
+        $this->_scopeConfig = $scopeConfig;
     }
 
     /**
@@ -68,6 +77,16 @@ class GiftcardConfigProvider implements ConfigProviderInterface
             $config['diggecard']['giftcard']['currencyCode'] = $currentCurrencyCode;
         }
 
+        $config['diggecard']['isEnable'] = $this->isModuleEnable();
+
         return $config;
+    }
+
+    public function isModuleEnable()
+    {
+        return (bool)$this->_scopeConfig->getValue(
+            self::XML_MODULE_STATUS_PATH,
+            ScopeInterface::SCOPE_STORE
+        );
     }
 }
