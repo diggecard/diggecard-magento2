@@ -8,7 +8,6 @@ namespace Diggecard\Giftcard\Block\Giftcard;
 
 use Diggecard\Giftcard\Helper\Data;
 use Diggecard\Giftcard\Model\GiftcardConfigProvider;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Template;
 use Diggecard\Giftcard\Model\Config;
 
@@ -39,12 +38,10 @@ class Index extends Template
     public function __construct(
         Template\Context $context,
         Config $config,
-        Data $dataHelper,
         GiftcardConfigProvider $giftcardConfigProvider,
         array $data = [])
     {
         $this->config = $config;
-        $this->_dataHelper = $dataHelper;
         $this->_giftcardConfigProvider = $giftcardConfigProvider;
         parent::__construct($context, $data);
     }
