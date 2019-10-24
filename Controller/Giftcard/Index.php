@@ -9,7 +9,6 @@ namespace Diggecard\Giftcard\Controller\Giftcard;
 use Diggecard\Giftcard\Model\GiftcardConfigProvider;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NotFoundException;
