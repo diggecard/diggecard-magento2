@@ -6,6 +6,10 @@
 
 namespace Diggecard\Giftcard\Api;
 
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Zend\Db\Sql\Ddl\Column\Timestamp;
 use Diggecard\Giftcard\Api\Data\GiftcardInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -21,8 +25,8 @@ interface GiftcardRepositoryInterface
      * @param int $entityId
      *
      * @return GiftcardInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     public function get($entityId);
 
@@ -30,8 +34,8 @@ interface GiftcardRepositoryInterface
      * @param $qrCode
      *
      * @return GiftcardInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     public function getByQrCode($qrCode);
 
@@ -39,8 +43,8 @@ interface GiftcardRepositoryInterface
      * @param $cardData
      *
      * @return GiftcardInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     public function getByCardData($cardData);
 
@@ -48,8 +52,8 @@ interface GiftcardRepositoryInterface
      * @param $valueRemains
      *
      * @return GiftcardInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     public function getByValueRemains($valueRemains);
 
@@ -57,8 +61,8 @@ interface GiftcardRepositoryInterface
      * @param Timestamp
      *
      * @return GiftcardInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     public function getByCreatedAt($createdAt);
 
@@ -66,8 +70,8 @@ interface GiftcardRepositoryInterface
      * @param Timestamp
      *
      * @return GiftcardInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     public function getByUpdatedAt($updatedAt);
 
@@ -75,8 +79,8 @@ interface GiftcardRepositoryInterface
      * @param Timestamp
      *
      * @return GiftcardInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     public function getByValidUntil($validUntil);
 
@@ -84,8 +88,8 @@ interface GiftcardRepositoryInterface
      * @param GiftcardInterface $giftcard
      *
      * @return GiftcardInterface
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws CouldNotSaveException
+     * @throws LocalizedException
      */
     public function save(GiftcardInterface $giftcard);
 
@@ -93,8 +97,8 @@ interface GiftcardRepositoryInterface
      * @param GiftcardInterface $giftcard
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws CouldNotDeleteException
+     * @throws LocalizedException
      */
     public function delete(GiftcardInterface $giftcard);
 
@@ -102,9 +106,9 @@ interface GiftcardRepositoryInterface
      * @param integer $entityId
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws CouldNotDeleteException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function deleteByEntityId($entityId);
 
@@ -112,9 +116,9 @@ interface GiftcardRepositoryInterface
      * @param string $qrCode
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws CouldNotDeleteException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function deleteByQrCode($qrCode);
 
@@ -122,9 +126,9 @@ interface GiftcardRepositoryInterface
      * @param string $cardData
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws CouldNotDeleteException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function deleteByCardData($cardData);
 
@@ -132,9 +136,9 @@ interface GiftcardRepositoryInterface
      * @param string $valueRemains
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws CouldNotDeleteException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function deleteByValueRemains($valueRemains);
 
@@ -142,9 +146,9 @@ interface GiftcardRepositoryInterface
      * @param Timestamp $createdAt
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws CouldNotDeleteException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function deleteByCreatedAt($createdAt);
 
@@ -152,9 +156,9 @@ interface GiftcardRepositoryInterface
      * @param Timestamp $updatedAt
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws CouldNotDeleteException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function deleteByUpdatedAt($updatedAt);
 
@@ -162,9 +166,9 @@ interface GiftcardRepositoryInterface
      * @param Timestamp $validUntil
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws CouldNotDeleteException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function deleteByValidUntil($validUntil);
 

@@ -6,6 +6,7 @@
 
 namespace Diggecard\Giftcard\Model;
 
+use Exception;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -56,7 +57,8 @@ class GiftcardRepository implements GiftcardRepositoryInterface
         GiftcardFactory $giftcardFactory,
         CollectionFactory $collectionFactory,
         GiftcardSearchResultsInterfaceFactory $searchResultsFactory
-    ) {
+    )
+    {
         $this->resource = $resource;
         $this->giftcardFactory = $giftcardFactory;
         $this->collectionFactory = $collectionFactory;
@@ -168,7 +170,7 @@ class GiftcardRepository implements GiftcardRepositoryInterface
     {
         try {
             $this->resource->save($giftcard);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new CouldNotSaveException(__($exception->getMessage()));
         }
 
@@ -182,7 +184,7 @@ class GiftcardRepository implements GiftcardRepositoryInterface
     {
         try {
             $this->resource->delete($giftcard);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new CouldNotDeleteException(__($exception->getMessage()));
         }
         return true;

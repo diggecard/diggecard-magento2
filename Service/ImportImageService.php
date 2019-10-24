@@ -31,6 +31,7 @@ class ImportImageService
      * @var File
      */
     protected $file;
+
     /**
      * ImportImageService constructor
      *
@@ -40,7 +41,8 @@ class ImportImageService
     public function __construct(
         DirectoryList $directoryList,
         File $file
-    ) {
+    )
+    {
         $this->directoryList = $directoryList;
         $this->file = $file;
     }
@@ -61,7 +63,7 @@ class ImportImageService
         $newFileName = $importedImage['newFileName'];
 
         if ($result) {
-            /** @var ProductInterface $product*/
+            /** @var ProductInterface $product */
             $product->addImageToMediaGallery($newFileName, $imageType, true, $visible);
         }
         return $result;
@@ -73,7 +75,8 @@ class ImportImageService
      * @throws FileSystemException
      * @throws Exception
      */
-    public function importImage($imageUrl) {
+    public function importImage($imageUrl)
+    {
         /** @var string $tmpDir */
         $tmpDir = $this->getMediaDirTmpDir();
         /** create folder if it is not exists */

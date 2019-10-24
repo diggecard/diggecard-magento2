@@ -60,7 +60,7 @@ class Complete implements ObserverInterface
      */
     private $logger;
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     private $customerSession;
 
@@ -113,9 +113,9 @@ class Complete implements ObserverInterface
         $orderState = $order->getState();
         $value = $this->config->getApiKey();
         $errors = [];
-        $this->logger->saveLog('complete_observer');
-        if($this->customerSession->getDelegatedNewCustomerData()){
-            $this->logger->saveLog('Customer creation');
+        $this->logger->saveLog(__('complete_observer'));
+        if ($this->customerSession->getDelegatedNewCustomerData()) {
+            $this->logger->saveLog(__('Customer creation'));
             return $order;
         }
 
@@ -131,12 +131,12 @@ class Complete implements ObserverInterface
                     "firstName" => $billingAdress->getFirstname(),
                     "lastName" => $billingAdress->getLastname(),
                     "email" => $billingAdress->getEmail(),
-                    "externalOrderId" => $value.'_'.$order->getEntityId()
+                    "externalOrderId" => $value . '_' . $order->getEntityId()
                 ];
-                $this->logger->saveLog('Request DATA:');
+                $this->logger->saveLog(__('Request DATA:'));
                 $this->logger->saveLog($data);
                 $response = $this->orderApiRepository->postCompleteOrder($data);
-                $this->logger->saveLog('Response DATA:');
+                $this->logger->saveLog(__('Response DATA:'));
                 $this->logger->saveLog($response);
                 if (isset($response['errorMessage']) || isset($response['validationErrors'])) {
                     $errors[] = $item->getPrice();
@@ -153,8 +153,8 @@ class Complete implements ObserverInterface
             }
         }
 //        }
-        if(!empty($errors)){
-            $message = implode(', ',$errors);
+        if (!empty($errors)) {
+            $message = implode(', ', $errors);
             throw new LocalizedException(
                 __(
                     "Cannot create giftcard(s) with value(s): %1",
@@ -175,32 +175,32 @@ class Complete implements ObserverInterface
             if (in_array($key, $keys)) {
                 switch ($key) {
                     case 'qrCode':
-                        {
-                            $giftcard->setQrCode($giftcardData['qrCode']);
-                            break;
-                        }
+                    {
+                        $giftcard->setQrCode($giftcardData['qrCode']);
+                        break;
+                    }
                     case 'valueRemains':
-                        {
-                            $giftcard->setValueRemains($giftcardData['valueRemains']);
-                            break;
-                        }
+                    {
+                        $giftcard->setValueRemains($giftcardData['valueRemains']);
+                        break;
+                    }
                     case 'createdTime':
-                        {
-                            $date = date("Y-m-d H:i:s", strtotime($giftcardData['createdTime']));
-                            $giftcard->setCreatedAt($date);
-                            $giftcard->setUpdatedAt($date);
-                            break;
-                        }
+                    {
+                        $date = date("Y-m-d H:i:s", strtotime($giftcardData['createdTime']));
+                        $giftcard->setCreatedAt($date);
+                        $giftcard->setUpdatedAt($date);
+                        break;
+                    }
                     case 'validUntilTime':
-                        {
-                            $date = date("Y-m-d H:i:s", strtotime($giftcardData['validUntilTime']));
-                            $giftcard->setValidUntil($date);
-                            break;
-                        }
+                    {
+                        $date = date("Y-m-d H:i:s", strtotime($giftcardData['validUntilTime']));
+                        $giftcard->setValidUntil($date);
+                        break;
+                    }
                     default:
-                        {
-                            $cardData[$key] = $value;
-                        }
+                    {
+                        $cardData[$key] = $value;
+                    }
                 }
             } else {
                 $cardData[$key] = $value;
@@ -211,9 +211,9 @@ class Complete implements ObserverInterface
         try {
             $this->giftcardRepository->save($giftcard);
         } catch (CouldNotSaveException $e) {
-            $this->logger->saveLog($e->getMessage(), Log::TYPE_EXCEPTION);
+            $this->logger->saveLog(__($e->getMessage()), Log::TYPE_EXCEPTION);
         } catch (LocalizedException $e) {
-            $this->logger->saveLog($e->getMessage(), Log::TYPE_EXCEPTION);
+            $this->logger->saveLog(__($e->getMessage()), Log::TYPE_EXCEPTION);
         }
     }
 }

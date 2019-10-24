@@ -13,8 +13,6 @@ use Magento\Framework\DataObject;
 use Magento\Catalog\Model\CustomOptions\CustomOptionFactory;
 use Magento\Quote\Api\Data\ProductOptionInterfaceFactory;
 use Magento\Quote\Api\Data\ProductOptionInterface;
-
-use Diggecard\Giftcard\Helper\Data as Json;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Filesystem;
@@ -44,7 +42,7 @@ class Giftcard extends AbstractType
     /**
      * Check is virtual product
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return bool
      */
     public function isVirtual($product)
