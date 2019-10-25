@@ -8,13 +8,13 @@ use Magento\Sales\Api\Data\OrderInterface;
 class Hash
 {
     /** @var Config */
-    protected $_config;
+    protected $config;
 
     public function __construct(
         Config $config
     )
     {
-        $this->_config = $config;
+        $this->config = $config;
     }
 
     /**
@@ -24,7 +24,7 @@ class Hash
     public function generateHash($order)
     {
         $string =
-            $this->_config->getApiKey()
+            $this->config->getApiKey()
             . $order->getEntityId()
             . $order->getCustomerEmail()
             . $order->getGrandTotal()

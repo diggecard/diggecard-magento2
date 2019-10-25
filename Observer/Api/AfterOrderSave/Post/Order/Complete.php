@@ -67,7 +67,7 @@ class Complete implements ObserverInterface
     /**
      * @var Hash
      */
-    protected $_hash;
+    protected $hash;
 
     /**
      * Complete constructor.
@@ -97,7 +97,7 @@ class Complete implements ObserverInterface
         $this->giftcardFactory = $giftcardFactory;
         $this->json = $json;
         $this->logger = $logger;
-        $this->_hash = $hash;
+        $this->hash = $hash;
         $this->customerSession = $customerSession;
     }
 
@@ -130,7 +130,7 @@ class Complete implements ObserverInterface
                     "firstName" => $billingAdress->getFirstname(),
                     "lastName" => $billingAdress->getLastname(),
                     "email" => $billingAdress->getEmail(),
-                    "externalOrderId" => $this->_hash->generateHash($order)
+                    "externalOrderId" => $this->hash->generateHash($order)
                 ];
                 $this->logger->saveLog(__('Request DATA:'));
                 $this->logger->saveLog($data);
