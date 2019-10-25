@@ -7,6 +7,7 @@
 namespace Diggecard\Giftcard\Observer\Api\AfterOrderSave\Post\Order;
 
 use Diggecard\Giftcard\Api\Data\GiftcardInterface;
+use Diggecard\Giftcard\Helper\Hash;
 use Diggecard\Giftcard\Helper\Log;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -20,7 +21,6 @@ use Magento\Framework\Event\Observer;
 use Diggecard\Giftcard\Api\GiftcardRepositoryInterface;
 use Diggecard\Giftcard\Model\GiftcardFactory;
 use Diggecard\Giftcard\Helper\Data as Json;
-use Diggecard\Giftcard\Model\Config;
 use Magento\Customer\Model\Session;
 
 /**
@@ -65,9 +65,9 @@ class Complete implements ObserverInterface
     private $customerSession;
 
     /**
-     * @var Config
+     * @var Hash
      */
-    protected $config;
+    protected $hash;
 
     /**
      * Complete constructor.
@@ -77,7 +77,7 @@ class Complete implements ObserverInterface
      * @param GiftcardFactory $giftcardFactory
      * @param Log $logger
      * @param Json $json
-     * @param Config $config
+     * @param Hash $hash
      * @param Session $customerSession
      */
     public function __construct(
@@ -87,7 +87,7 @@ class Complete implements ObserverInterface
         GiftcardFactory $giftcardFactory,
         Log $logger,
         Json $json,
-        Config $config,
+        Hash $hash,
         Session $customerSession
     )
     {
@@ -97,7 +97,7 @@ class Complete implements ObserverInterface
         $this->giftcardFactory = $giftcardFactory;
         $this->json = $json;
         $this->logger = $logger;
-        $this->config = $config;
+        $this->hash = $hash;
         $this->customerSession = $customerSession;
     }
 
@@ -111,7 +111,6 @@ class Complete implements ObserverInterface
         /** @var OrderInterface */
         $order = $observer->getEvent()->getOrder();
         $orderState = $order->getState();
-        $value = $this->config->getApiKey();
         $errors = [];
         $this->logger->saveLog(__('complete_observer'));
         if ($this->customerSession->getDelegatedNewCustomerData()) {
@@ -131,7 +130,7 @@ class Complete implements ObserverInterface
                     "firstName" => $billingAdress->getFirstname(),
                     "lastName" => $billingAdress->getLastname(),
                     "email" => $billingAdress->getEmail(),
-                    "externalOrderId" => $value . '_' . $order->getEntityId()
+                    "externalOrderId" => $this->hash->generateHash($order)
                 ];
                 $this->logger->saveLog(__('Request DATA:'));
                 $this->logger->saveLog($data);
@@ -152,7 +151,7 @@ class Complete implements ObserverInterface
                 }
             }
         }
-//        }
+        
         if (!empty($errors)) {
             $message = implode(', ', $errors);
             throw new LocalizedException(
