@@ -2,7 +2,7 @@
   "name": "digg-ecard/diggecard",
   "description": "A Magento 2 module that add custom giftcard",
   "type": "magento2-module",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "license": [
     "OSL-3.0",
     "AFL-3.0"

@@ -16,6 +16,7 @@ define([
             window.diggecard = {
                 widget: this
             };
+            url.setBaseUrl(BASE_URL);
         },
 
         addEvent: function () {
@@ -32,7 +33,7 @@ define([
             let postData = JSON.parse(orderData);
             $.ajax({
                 showLoader: true,
-                url: url.build('diggecard/giftcard/add'),
+                url: url.build(BASE_URL + 'diggecard/giftcard/add'),
                 data: postData,
                 type: "POST",
                 dataType: 'json'
