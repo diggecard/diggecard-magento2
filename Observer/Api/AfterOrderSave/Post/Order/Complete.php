@@ -22,6 +22,7 @@ use Diggecard\Giftcard\Api\GiftcardRepositoryInterface;
 use Diggecard\Giftcard\Model\GiftcardFactory;
 use Diggecard\Giftcard\Helper\Data as Json;
 use Magento\Customer\Model\Session;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Complete
@@ -69,6 +70,9 @@ class Complete implements ObserverInterface
      */
     protected $hash;
 
+    /** @var StoreManagerInterface */
+    protected $storeManager;
+
     /**
      * Complete constructor.
      * @param Order $orderModel
@@ -88,6 +92,7 @@ class Complete implements ObserverInterface
         Log $logger,
         Json $json,
         Hash $hash,
+        StoreManagerInterface $storeManager,
         Session $customerSession
     )
     {
@@ -98,6 +103,7 @@ class Complete implements ObserverInterface
         $this->json = $json;
         $this->logger = $logger;
         $this->hash = $hash;
+        $this->storeManager = $storeManager;
         $this->customerSession = $customerSession;
     }
 
@@ -131,6 +137,8 @@ class Complete implements ObserverInterface
                     "lastName" => $billingAdress->getLastname(),
                     "email" => $billingAdress->getEmail(),
                     "externalOrderId" => $this->hash->generateHash($order)
+                        . '_' . $this->storeManager->getStore()->getId()
+                        . '_' . $order->getIncrementId()
                 ];
                 $this->logger->saveLog(__('Request DATA:'));
                 $this->logger->saveLog($data);
