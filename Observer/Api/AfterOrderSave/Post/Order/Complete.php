@@ -137,7 +137,7 @@ class Complete implements ObserverInterface
                     "lastName" => $billingAdress->getLastname(),
                     "email" => $billingAdress->getEmail(),
                     "externalOrderId" => $this->hash->generateHash($order)
-                        . '_' . $this->storeManager->getStore()->getId()
+                        . '_' . $order->getStoreId()
                         . '_' . $order->getIncrementId()
                 ];
                 $this->logger->saveLog(__('Request DATA:'));
