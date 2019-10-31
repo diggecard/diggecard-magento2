@@ -46,10 +46,12 @@ class Config
      */
     public function getApiKey()
     {
-        return $this->scopeConfig->getValue(
+        $apiKey = trim($this->scopeConfig->getValue(
             self::XML_PATH_API_KEY,
             ScopeInterface::SCOPE_WEBSITE
-        );
+        ));
+
+        return $apiKey;
     }
 
     /**
@@ -59,10 +61,7 @@ class Config
      */
     public function getAuthorization()
     {
-        return 'DiggApiKey ' . $this->scopeConfig->getValue(
-                self::XML_PATH_API_KEY,
-                ScopeInterface::SCOPE_WEBSITE
-            );
+        return 'DiggApiKey ' . $this->getApiKey();
     }
 
     /**
@@ -82,10 +81,14 @@ class Config
      */
     public function getApiUrl()
     {
-        return $this->scopeConfig->getValue(
+        $apiUrl = trim(
+            trim($this->scopeConfig->getValue(
             self::XML_PATH_API_URL,
             ScopeInterface::SCOPE_WEBSITE
-        );
+            )
+        ), '/');
+
+        return $apiUrl;
     }
 
     /**
@@ -95,10 +98,14 @@ class Config
      */
     public function getIframeSrc()
     {
-        return $this->scopeConfig->getValue(
-            self::XML_PATH_IFRAME_SRC,
-            ScopeInterface::SCOPE_WEBSITE
-        );
+        $iframeSrc = trim(
+            trim($this->scopeConfig->getValue(
+                self::XML_PATH_IFRAME_SRC,
+                ScopeInterface::SCOPE_WEBSITE
+            )
+        ), '/');
+
+        return $iframeSrc;
     }
 
     /**
@@ -108,10 +115,12 @@ class Config
      */
     public function getTimeToReserve()
     {
-        return $this->scopeConfig->getValue(
+        $timeToReserve = trim($this->scopeConfig->getValue(
             self::XML_PATH_TIME_TO_RESERVE,
             ScopeInterface::SCOPE_WEBSITE
-        );
+        ));
+
+        return $timeToReserve;
     }
 
     /**
