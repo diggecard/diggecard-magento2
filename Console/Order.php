@@ -3,6 +3,7 @@
 namespace Diggecard\Giftcard\Console;
 
 use Diggecard\Giftcard\Observer\Api\AfterOrderSave\Post\Order\Complete;
+use Magento\Framework\App\State;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\Observer;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -20,6 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Order extends Command
 {
     const MODE_ARGUMENT = 'order-id';
+    const AREA_GLOBAL = 'global';
 
     /** @var OrderFactory */
     protected $order;
@@ -27,14 +29,19 @@ class Order extends Command
     /** @var Complete */
     protected $complete;
 
+    /** @var State */
+    protected $state;
+
     public function __construct(
         OrderFactory $order,
         Complete $complete,
+        State $state,
         string $name = null
     )
     {
         $this->order = $order;
         $this->complete = $complete;
+        $this->state = $state;
 
         parent::__construct($name);
     }
@@ -62,6 +69,8 @@ class Order extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->state->setAreaCode(self::AREA_GLOBAL);
+
         if ($orderIncrementId = (int)$input->getOption(self::MODE_ARGUMENT)){
             $orderDetails = $this->order->create()->loadByIncrementId($orderIncrementId);
 
