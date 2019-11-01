@@ -14,6 +14,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\App\Area;
 
 /**
  * Class SomeCommand
@@ -21,7 +22,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Order extends Command
 {
     const MODE_ARGUMENT = 'order-id';
-    const AREA_GLOBAL = 'global';
 
     /** @var OrderFactory */
     protected $order;
@@ -69,7 +69,7 @@ class Order extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->state->setAreaCode(self::AREA_GLOBAL);
+        $this->state->setAreaCode(Area::AREA_GLOBAL);
 
         if ($orderIncrementId = (int)$input->getOption(self::MODE_ARGUMENT)){
             $orderDetails = $this->order->create()->loadByIncrementId($orderIncrementId);
