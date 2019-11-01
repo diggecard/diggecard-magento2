@@ -22,6 +22,7 @@ use Diggecard\Giftcard\Api\GiftcardRepositoryInterface;
 use Diggecard\Giftcard\Model\GiftcardFactory;
 use Diggecard\Giftcard\Helper\Data as Json;
 use Magento\Customer\Model\Session;
+use Magento\Sales\Model\Order\Invoice;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -114,61 +115,69 @@ class Complete implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        /** @var OrderInterface */
-        $order = $observer->getEvent()->getOrder();
-        $orderState = $order->getState();
-        $errors = [];
-        $this->logger->saveLog(__('complete_observer'));
-        if ($this->customerSession->getDelegatedNewCustomerData()) {
-            $this->logger->saveLog(__('Customer creation'));
-            return $order;
-        }
+        /** @var Invoice $invoice */
+        $invoice = $observer->getEvent()->getInvoice();
 
-        $itemCollection = $order->getAllItems();
-        foreach ($itemCollection as $item) {
-            /** @var ProductInterface $item */
-            $itemType = $item->getProductType();
-            if ($itemType == GiftcardType::TYPE_CODE && $orderState == 'new' || $itemType == GiftcardType::TYPE_CODE && $orderState == 'processing') {
-                $orderHash = $item->getProductOptions()["dg_giftcard_hash"];
-                $billingAdress = $order->getBillingAddress();
-                $data = [
-                    "orderHash" => $orderHash,
-                    "firstName" => $billingAdress->getFirstname(),
-                    "lastName" => $billingAdress->getLastname(),
-                    "email" => $billingAdress->getEmail(),
-                    "externalOrderId" => $this->hash->generateHash($order)
-                        . '_' . $order->getStoreId()
-                        . '_' . $order->getIncrementId()
-                ];
-                $this->logger->saveLog(__('Request DATA:'));
-                $this->logger->saveLog($data);
-                $response = $this->orderApiRepository->postCompleteOrder($data);
-                $this->logger->saveLog(__('Response DATA:'));
-                $this->logger->saveLog($response);
-                if (isset($response['errorMessage']) || isset($response['validationErrors'])) {
-                    $errors[] = $item->getPrice();
-                    continue;
-                }
-                if (array_key_exists('orderHash', $response) && array_key_exists('giftCards', $response)) {
-                    /** @var GiftcardInterface $giftcard */
-                    foreach ($response['giftCards'] as $giftcardData) {
-                        $this->logger->saveLog('before_add_giftcard');
-                        $this->addGiftcard($giftcardData);
-                        $this->logger->saveLog('giftcard_added');
+        if ($invoice->getId() && $invoice->getState() == Invoice::STATE_PAID) {
+            /** @var OrderInterface */
+            $order = $invoice->getOrder();
+            $orderState = $order->getState();
+            $errors = [];
+            $this->logger->saveLog(__('complete_observer'));
+            if ($this->customerSession->getDelegatedNewCustomerData()) {
+                $this->logger->saveLog(__('Customer creation'));
+                return $order;
+            }
+
+            $itemCollection = $order->getAllItems();
+            foreach ($itemCollection as $item) {
+                /** @var ProductInterface $item */
+                $itemType = $item->getProductType();
+                if ($itemType == GiftcardType::TYPE_CODE) {
+                    $orderHash = $item->getProductOptions()["dg_giftcard_hash"];
+                    $billingAdress = $order->getBillingAddress();
+                    $data = [
+                        "orderHash" => $orderHash,
+                        "firstName" => $billingAdress->getFirstname(),
+                        "lastName" => $billingAdress->getLastname(),
+                        "email" => $billingAdress->getEmail(),
+                        "externalOrderId" => $this->hash->generateHash($order)
+                            . '_' . $order->getStoreId()
+                            . '_' . $order->getIncrementId()
+                    ];
+                    $this->logger->saveLog(__('Request DATA:'));
+                    $this->logger->saveLog($data);
+                    $response = $this->orderApiRepository->postCompleteOrder($data);
+                    $this->logger->saveLog(__('Response DATA:'));
+                    $this->logger->saveLog($response);
+                    if (isset($response['errorMessage']) || isset($response['validationErrors'])) {
+                        $errors[] = $item->getPrice();
+                        continue;
+                    }
+                    if (array_key_exists('orderHash', $response) && array_key_exists('giftCards', $response)) {
+                        /** @var GiftcardInterface $giftcard */
+                        foreach ($response['giftCards'] as $giftcardData) {
+                            $this->logger->saveLog('before_add_giftcard');
+                            $this->addGiftcard($giftcardData);
+                            $this->logger->saveLog('giftcard_added');
+                        }
                     }
                 }
             }
         }
         
         if (!empty($errors)) {
-            $message = implode(', ', $errors);
+            $message = !empty($response['validationErrors'])
+                ? array_values($response['validationErrors'])[0]
+                : "Cannot create giftcard(s) with value(s): " . implode(', ', $errors);
+
             throw new LocalizedException(
                 __(
-                    "Cannot create giftcard(s) with value(s): %1",
                     $message
                 )
             );
         }
+
         return $order;
     }
 
