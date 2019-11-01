@@ -12,6 +12,24 @@
             <resource>Magento_Catalog::config_catalog</resource>
             <group id="giftcard" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>DiggEcard Settings</label>
+                <field id="heading_general_status" translate="label" sortOrder="0" showInDefault="1" showInWebsite="1">
+                    <label>Giftcard Status</label>
+                    <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
+                </field>
+                <field id="table_exists" translate="label" sortOrder="0" showInDefault="1" showInWebsite="1">
+                    <label>Table exists</label>
+                    <frontend_model>Diggecard\Giftcard\Block\System\Config\Form\Field\Disable</frontend_model>
+                </field>
+                <field id="product_exists" translate="label" sortOrder="0" showInDefault="1" showInWebsite="1">
+                    <label>Product exists</label>
+                    <frontend_model>Diggecard\Giftcard\Block\System\Config\Form\Field\Disable</frontend_model>
+                </field>
+                <field id="product_is_salable" translate="label" sortOrder="0" showInDefault="1" showInWebsite="1">
+                    <label>Product is salable</label>
+                    <frontend_model>Diggecard\Giftcard\Block\System\Config\Form\Field\Disable</frontend_model>
+                </field>
+
+
                 <field id="heading_np_general" translate="label" sortOrder="0" showInDefault="1" showInWebsite="1">
                     <label>Giftcard General</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
