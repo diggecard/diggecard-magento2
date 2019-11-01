@@ -86,7 +86,7 @@ class Manager
             $this->logger->saveLog($remoteGiftcard);
             $currentCurrencyCode = $this->_storeManager->getStore()->getCurrentCurrency()->getCode();
             $baseCurrencyCode = $this->_storeManager->getStore()->getBaseCurrency()->getCode();
-            if ($remoteGiftcard['id']) {
+            if (array_key_exists('id', $remoteGiftcard['id']) && !empty($remoteGiftcard['id'])) {
                 try {
                     $localGiftcard = $this->giftcardRepository->getByQrCode($qrCode);
                     if (($baseCurrencyCode == $currentCurrencyCode) && ($remoteGiftcard['currencyCode'] == $currentCurrencyCode)) {
