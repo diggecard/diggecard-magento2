@@ -7,6 +7,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Event\Observer;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\OrderFactory;
+use mysql_xdevapi\Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -72,7 +73,14 @@ class Order extends Command
                 $observer = new Observer();
                 $observer->setEvent($event);
 
-                $this->complete->execute($observer);
+                try {
+                    $this->complete->execute($observer);
+                } catch (\Exception $exception) {
+                    echo $exception->getMessage();
+                    die;
+                }
+
+                echo 'Completed';
             }
 
             echo 'No invoice';

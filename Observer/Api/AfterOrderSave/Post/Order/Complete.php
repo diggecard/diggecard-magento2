@@ -167,10 +167,10 @@ class Complete implements ObserverInterface
         }
         
         if (!empty($errors)) {
-            if (!empty($response['validationErrors']['purchaseTransactionId']))
-            $message = !empty($response['validationErrors']['purchaseTransactionId'])
-                ? $response['validationErrors']['purchaseTransactionId']
-                : __("Cannot create giftcard(s) with value(s): %1", implode(', ', $errors));
+            $message = !empty($response['validationErrors'])
+                ? array_values($response['validationErrors'])[0]
+                : "Cannot create giftcard(s) with value(s): " . implode(', ', $errors);
+
             throw new LocalizedException(
                 __(
                     $message
