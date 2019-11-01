@@ -20,12 +20,4 @@
     <type name="Magento\Sales\Block\Adminhtml\Order\Invoice\Create\Items">
         <plugin name="DiggecardCanEditInvoiceQty" type="Diggecard\Giftcard\Plugin\Invoice\CanEditQty"/>
     </type>
-
-    <type name="Magento\Framework\Console\CommandList">
-        <arguments>
-            <argument name="commands" xsi:type="array">
-                <item name="create_order" xsi:type="object">Diggecard\Giftcard\Console\Order</item>
-            </argument>
-        </arguments>
-    </type>
 </config>
