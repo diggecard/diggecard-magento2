@@ -81,9 +81,8 @@ class Order extends Command
                 }
 
                 echo 'Completed';
-            }
-
-            echo 'No invoice';
+            } else
+                echo 'No invoice';
         } else
             echo 'Please pass the argument --order-id with order id';
     }
