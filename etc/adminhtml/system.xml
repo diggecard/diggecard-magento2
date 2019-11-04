@@ -18,18 +18,15 @@
                 </field>
                 <field id="table_exists" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1">
                     <label>Table exists</label>
-                    <frontend_model>Diggecard\Giftcard\Block\System\Config\Form\Field\Disable</frontend_model>
-                    <source_model>Diggecard\Giftcard\Block\System\Config\Form\Field\TableExists</source_model>
+                    <frontend_model>Diggecard\Giftcard\Block\System\Config\TableExists</frontend_model>
                 </field>
                 <field id="product_exists" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1">
                     <label>Product exists</label>
-                    <frontend_model>Diggecard\Giftcard\Block\System\Config\Form\Field\Disable</frontend_model>
-                    <source_model>Diggecard\Giftcard\Block\System\Config\Form\Field\ProductExists</source_model>
+                    <frontend_model>Diggecard\Giftcard\Block\System\Config\ProductExists</frontend_model>
                 </field>
                 <field id="product_is_salable" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1">
                     <label>Product is salable</label>
-                    <frontend_model>Diggecard\Giftcard\Block\System\Config\Form\Field\Disable</frontend_model>
-                    <source_model>Diggecard\Giftcard\Block\System\Config\Form\Field\ProductIsSalable</source_model>
+                    <frontend_model>Diggecard\Giftcard\Block\System\Config\ProductIsSalable</frontend_model>
                 </field>
 
                 <field id="heading_np_general" translate="label" sortOrder="0" showInDefault="1" showInWebsite="1">

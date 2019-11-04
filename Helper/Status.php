@@ -7,7 +7,6 @@ use Diggecard\Giftcard\Model\ResourceModel\Giftcard;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Model\Stock\StockItemRepository;
-use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductSourceStatus;
 
@@ -19,16 +18,18 @@ class Status
     /** @var ProductRepositoryInterface */
     protected $productRepository;
 
-    /** @var ProductInterface */
-    protected $product;
-
     /** @var StockItemRepository */
     protected $stockRepository;
 
+    /**
+     * Status constructor.
+     * @param ResourceConnection $resourceConnection
+     * @param ProductRepositoryInterface $productRepository
+     * @param StockItemRepository $stockRepository
+     */
     public function __construct(
         ResourceConnection $resourceConnection,
         ProductRepositoryInterface $productRepository,
-        ProductInterface $product,
         StockItemRepository $stockRepository
     )
     {
@@ -38,11 +39,17 @@ class Status
         $this->stockRepository = $stockRepository;
     }
 
+    /**
+     * @return bool
+     */
     public function isTableExists()
     {
         return $this->resourseConnection->getConnection()->isTableExists(Giftcard::TABLE_NAME);
     }
 
+    /**
+     * @return bool
+     */
     public function isProductExists()
     {
         if ($this->getProduct())
@@ -51,6 +58,10 @@ class Status
         return false;
     }
 
+    /**
+     * @return bool
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function isProductSalable()
     {
         $productStatus = $this->getProduct()->getStatus();
@@ -62,6 +73,10 @@ class Status
         return false;
     }
 
+    /**
+     * @return ProductInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     private function getProduct()
     {
         return $this->productRepository->get(Add::DG_SKU, false, 0);
