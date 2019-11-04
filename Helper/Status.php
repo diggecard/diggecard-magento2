@@ -9,6 +9,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductSourceStatus;
 
 class Status
 {
@@ -52,11 +53,10 @@ class Status
 
     public function isProductSalable()
     {
-        $product = $this->getProduct()->();
-        $active = $this->getProduct()->();
-        $stock = $this->stockRepository->get($this->getProduct()->getId())->getQty();
+        $productStatus = $this->getProduct()->getStatus();
+        $stockStatus = $this->stockRepository->get($this->getProduct()->getId())->getIsInStock();
 
-        if ($this->getProduct()->getStatus() && $this->stockRepository->get($this->getProduct()->getId()))
+        if ($productStatus == ProductSourceStatus::STATUS_ENABLED && $stockStatus)
             return true;
 
         return false;
@@ -64,6 +64,6 @@ class Status
 
     private function getProduct()
     {
-        return $this->productRepository->get(Add::DG_SKU);
+        return $this->productRepository->get(Add::DG_SKU, false, 0);
     }
 }
