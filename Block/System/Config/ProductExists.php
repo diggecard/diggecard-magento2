@@ -34,11 +34,11 @@ class ProductExists extends Field
      */
     protected function _renderValue(AbstractElement $element)
     {
-        $text = 'Product not created';
+        $text = __('Product not created');
         $color = 'red';
 
         if ($this->status->isProductExists()) {
-            $text = 'Product created';
+            $text = __('Product created');
             $color = 'green';
         }
 

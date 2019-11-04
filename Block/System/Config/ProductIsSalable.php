@@ -34,11 +34,11 @@ class ProductIsSalable extends Field
      */
     protected function _renderValue(AbstractElement $element)
     {
-        $text = 'Product not salable';
+        $text = __('Product not salable');
         $color = 'red';
 
         if ($this->status->isProductExists()) {
-            $text = 'Product is salable';
+            $text = __('Product is salable');
             $color = 'green';
         }
 

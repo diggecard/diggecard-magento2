@@ -34,11 +34,11 @@ class TableExists extends Field
      */
     protected function _renderValue(AbstractElement $element)
     {
-        $text = 'Table not created';
+        $text = __('Table not created');
         $color = 'red';
 
         if ($this->status->isTableExists()) {
-            $text = 'Table created';
+            $text = __('Table created');
             $color = 'green';
         }
 
