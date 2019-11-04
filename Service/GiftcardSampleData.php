@@ -8,10 +8,13 @@ namespace Diggecard\Giftcard\Service;
 
 use Diggecard\Giftcard\Model\Product\Type\Giftcard as GiftcardType;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\State;
 use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductAttributeStatus;
@@ -21,6 +24,8 @@ use Exception;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Catalog\Model\Product;
 
 /**
  * Class GiftcardSampleData
@@ -52,6 +57,9 @@ class GiftcardSampleData
      */
     protected $imageImporter;
 
+    /** @var EavSetupFactory */
+    protected $eavSetupFactory;
+
     /**
      * Giftcard SampleData constructor.
      * @param ProductFactory $productFactory
@@ -67,7 +75,8 @@ class GiftcardSampleData
         ProductModel $productModel,
         ProductRepositoryInterface $productRepository,
         StoreManagerInterface $storeManager,
-        ImportImageService $imageImporter
+        ImportImageService $imageImporter,
+        EavSetupFactory $eavSetupFactory
     )
     {
         $this->productFactory = $productFactory;
@@ -76,6 +85,7 @@ class GiftcardSampleData
         $this->productRepository = $productRepository;
         $this->storeManager = $storeManager;
         $this->imageImporter = $imageImporter;
+        $this->eavSetupFactory = $eavSetupFactory;
     }
 
     /**
@@ -88,6 +98,36 @@ class GiftcardSampleData
             $this->createSimpleGiftcard(0, 10);
         } catch (Exception $exception) {
             return false;
+        }
+    }
+
+    /**
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
+     */
+    public function addAssociateAttributes(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    {
+        /** @var EavSetup $eavSetup */
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
+
+        $fieldList = [
+            'tax_class_id',
+        ];
+
+        foreach ($fieldList as $field) {
+            $applyTo = explode(
+                ',',
+                $eavSetup->getAttribute(Product::ENTITY, $field, 'apply_to')
+            );
+            if (!in_array($this->giftcardType, $applyTo)) {
+                $applyTo[] = $this->giftcardType;
+                $eavSetup->updateAttribute(
+                    Product::ENTITY,
+                    $field,
+                    'apply_to',
+                    implode(',', $applyTo)
+                );
+            }
         }
     }
 
@@ -136,6 +176,5 @@ class GiftcardSampleData
         }
 
         return $this->productRepository->save($simpleProduct);
-
     }
 }
