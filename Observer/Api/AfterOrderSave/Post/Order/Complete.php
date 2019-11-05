@@ -117,11 +117,11 @@ class Complete implements ObserverInterface
     {
         /** @var Invoice $invoice */
         $invoice = $observer->getEvent()->getInvoice();
+        $order = $invoice->getOrder();
+        $orderState = $order->getState();
 
-        if ($invoice->getId() && $invoice->getState() == Invoice::STATE_PAID) {
-            /** @var OrderInterface */
-            $order = $invoice->getOrder();
-            $orderState = $order->getState();
+        if (($invoice->getId() && $invoice->getState() == Invoice::STATE_PAID) || $orderState == 'processing') {
+            /** @var OrderInterface */    
             $errors = [];
             $this->logger->saveLog(__('complete_observer'));
             if ($this->customerSession->getDelegatedNewCustomerData()) {
