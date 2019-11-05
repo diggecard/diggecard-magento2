@@ -117,7 +117,7 @@ class Complete implements ObserverInterface
     {
         /** @var Invoice $invoice */
         $invoice = $observer->getEvent()->getInvoice();
-        $order = $invoice->getOrder();
+        $order = $observer->getEvent()->getOrder();
         $orderState = $order->getState();
 
         if (($invoice->getId() && $invoice->getState() == Invoice::STATE_PAID) || $orderState == 'processing') {
