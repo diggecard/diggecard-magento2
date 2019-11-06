@@ -136,7 +136,6 @@ class Save implements ObserverInterface
             if ($itemType == GiftcardType::TYPE_CODE && in_array($orderState, self::ALLOWED_ORDER_STATE)) {
                 $orderHash = $item->getProductOptions()["dg_giftcard_hash"];
                 $billingAdress = $order->getBillingAddress();
-                die;
                 $data = [
                     "orderHash" => $orderHash,
                     "firstName" => $billingAdress->getFirstname(),
