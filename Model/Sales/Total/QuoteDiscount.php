@@ -74,7 +74,7 @@ class QuoteDiscount extends AbstractTotal
                 return $this;
             }
 
-            $label = __('Diggerecard Giftcard');
+            $label = __('Diggecard Giftcard');
             $subtotal = (double)$total->getSubtotalInclTax() + $total->getDiscountAmount() + $total->getShippingTaxAmount();
             $subtotal += $total->getShippingAmount() ? $total->getShippingAmount() : 0;
             $discountAmount = ((double)$giftCard->getValueRemains() > $subtotal) ? $subtotal : (double)$giftCard->getValueRemains();
