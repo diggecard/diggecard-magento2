@@ -76,7 +76,7 @@ class InvoiceDiscount extends AbstractTotal
 
         if ($quote->getDiggecardGiftcardDiscount()) {
 
-            $label = __('Diggerecard Giftcard');
+            $label = __('Diggecard Giftcard');
 
             $giftcardDiscountValue = -$quote->getDiggecardGiftcardDiscount();
             $baseGiftcardDiscountValue = $this->currencyConverter->convertToBaseCurrency($giftcardDiscountValue);
