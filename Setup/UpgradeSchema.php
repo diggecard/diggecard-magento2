@@ -98,6 +98,69 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 ]
             );
         }
+
+        if (version_compare($context->getVersion(), '1.0.10', '<')) {
+            $connection->changeColumn(
+                $installer->getTable('quote'),
+                'diggecard_giftcard_id',
+                'diggecard_giftcard_id',
+                [
+                    'type' => Table::TYPE_DECIMAL,
+                    'length' => '30,4',
+                    'nullable' => true,
+                    'comment' => 'Giftcard ID'
+                ]
+            );
+
+            $connection->changeColumn(
+                $installer->getTable('quote'),
+                'diggecard_giftcard_discount',
+                'diggecard_giftcard_discount',
+                [
+                    'type' => Table::TYPE_DECIMAL,
+                    'length' => '30,4',
+                    'nullable' => true,
+                    'comment' => 'Giftcard ID'
+                ]
+            );
+
+            $connection->changeColumn(
+                $installer->getTable('quote'),
+                'diggecard_giftcard_base_discount',
+                'diggecard_giftcard_base_discount',
+                [
+                    'type' => Table::TYPE_DECIMAL,
+                    'length' => '30,4',
+                    'nullable' => true,
+                    'comment' => 'Giftcard ID'
+                ]
+            );
+
+            $connection->changeColumn(
+                $installer->getTable('sales_order'),
+                'dg_giftcard_amount_invoiced',
+                'dg_giftcard_amount_invoiced',
+                [
+                    'type' => Table::TYPE_DECIMAL,
+                    'length' => '30,4',
+                    'nullable' => true,
+                    'comment' => 'Giftcard Amount Invoiced'
+                ]
+            );
+
+            $connection->changeColumn(
+                $installer->getTable('sales_order'),
+                'dg_giftcard_base_amount_invoiced',
+                'dg_giftcard_base_amount_invoiced',
+                [
+                    'type' => Table::TYPE_DECIMAL,
+                    'length' => '30,4',
+                    'nullable' => true,
+                    'comment' => 'Giftcard Amount Invoiced'
+                ]
+            );
+        }
+
         $installer->endSetup();
     }
 }
