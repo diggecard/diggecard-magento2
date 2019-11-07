@@ -89,7 +89,7 @@ class Manager
             if (is_array($remoteGiftcard) && array_key_exists('id', $remoteGiftcard) && !empty($remoteGiftcard['id'])) {
                 try {
                     $localGiftcard = $this->giftcardRepository->getByQrCode($qrCode);
-                    if (($baseCurrencyCode == $currentCurrencyCode) && ($remoteGiftcard['currencyCode'] == $currentCurrencyCode)) {
+                    if (($baseCurrencyCode == $currentCurrencyCode)) {
                         if ($localGiftcard->getEntityId()) {
                             $localGiftcard->setValueRemains($remoteGiftcard['valueRemains']);
                             return $this->giftcardRepository->save($localGiftcard);
