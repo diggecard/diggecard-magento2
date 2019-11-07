@@ -106,7 +106,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'diggecard_giftcard_id',
                 [
                     'type' => Table::TYPE_DECIMAL,
-                    'length' => '30,2',
+                    'length' => '30,4',
                     'nullable' => true,
                     'comment' => 'Giftcard ID'
                 ]
@@ -118,7 +118,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'diggecard_giftcard_discount',
                 [
                     'type' => Table::TYPE_DECIMAL,
-                    'length' => '30,2',
+                    'length' => '30,4',
                     'nullable' => true,
                     'comment' => 'Giftcard ID'
                 ]
@@ -130,7 +130,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'diggecard_giftcard_base_discount',
                 [
                     'type' => Table::TYPE_DECIMAL,
-                    'length' => '30,2',
+                    'length' => '30,4',
                     'nullable' => true,
                     'comment' => 'Giftcard ID'
                 ]
@@ -142,7 +142,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'dg_giftcard_amount_invoiced',
                 [
                     'type' => Table::TYPE_DECIMAL,
-                    'length' => '30,2',
+                    'length' => '30,4',
                     'nullable' => true,
                     'comment' => 'Giftcard Amount Invoiced'
                 ]
@@ -154,7 +154,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'dg_giftcard_base_amount_invoiced',
                 [
                     'type' => Table::TYPE_DECIMAL,
-                    'length' => '30,2',
+                    'length' => '30,4',
                     'nullable' => true,
                     'comment' => 'Giftcard Amount Invoiced'
                 ]
