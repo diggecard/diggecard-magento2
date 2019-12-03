@@ -1,6 +1,6 @@
-#Install Diggecard gift card module for magento2
+# Install Diggecard gift card module for magento2
 
-##Install plugin
+## Install plugin
 
 `$ composer require digg-ecard/diggecard`
 
@@ -17,7 +17,7 @@
 `$ php bin/magento cache:flush`
 
 
-##Configure admin interface
+## Configure admin interface
 
 Go to 
 Stores->Configuration
