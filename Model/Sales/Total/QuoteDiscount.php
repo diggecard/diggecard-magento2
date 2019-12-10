@@ -14,6 +14,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Model\Quote\Address\Total;
 use Diggecard\Giftcard\Api\GiftcardRepositoryInterface;
 use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
+use Diggecard\Giftcard\Model\Config;
 
 /**
  * Class QuoteDiscount
@@ -32,6 +33,11 @@ class QuoteDiscount extends AbstractTotal
      */
     protected $giftcardRepository;
 
+    /**
+     * @var Config
+     */
+    protected $config;
+
     const CODE = 'diggecard_giftcard_discount';
 
     /**
@@ -39,15 +45,17 @@ class QuoteDiscount extends AbstractTotal
      *
      * @param PriceCurrencyInterface $priceCurrency
      * @param GiftcardRepositoryInterface $giftcardRepository
+     * @param Config $config
      */
     public function __construct(
         PriceCurrencyInterface $priceCurrency,
-        GiftcardRepositoryInterface $giftcardRepository
+        GiftcardRepositoryInterface $giftcardRepository,
+        Config $config
     )
     {
         $this->_priceCurrency = $priceCurrency;
         $this->giftcardRepository = $giftcardRepository;
-
+        $this->config = $config;
     }
 
     /**
@@ -74,7 +82,7 @@ class QuoteDiscount extends AbstractTotal
                 return $this;
             }
 
-            $label = __('Diggecard Giftcard');
+            $label = $this->config->getDiscountLabel();
             $subtotal = (double)$total->getSubtotalInclTax() + $total->getDiscountAmount() + $total->getShippingTaxAmount();
             $subtotal += $total->getShippingAmount() ? $total->getShippingAmount() : 0;
             $discountAmount = ((double)$giftCard->getValueRemains() > $subtotal) ? $subtotal : (double)$giftCard->getValueRemains();
@@ -93,7 +101,7 @@ class QuoteDiscount extends AbstractTotal
             if ($total->getDiscountAmount()) {
                 // If a discount exists in cart and another discount is applied, the add both discounts.
                 $discountAmount = $total->getDiscountAmount() + $discountAmount;
-                $label = $total->getDiscountDescription() ? $total->getDiscountDescription() : __('Store Discount, ') . $label;
+                $label = $total->getDiscountDescription() ? $total->getDiscountDescription() : $label;
             }
 
             $total->setDiscountDescription($label);
