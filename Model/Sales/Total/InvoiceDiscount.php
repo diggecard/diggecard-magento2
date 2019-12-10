@@ -12,6 +12,7 @@ use Magento\Sales\Model\Order\Invoice\Total\AbstractTotal;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Diggecard\Giftcard\Api\GiftcardRepositoryInterface;
 use Diggecard\Giftcard\Service\CurrencyConverter;
+use Diggecard\Giftcard\Model\Config;
 
 /**
  * Class InvoiceDiscount
@@ -41,10 +42,16 @@ class InvoiceDiscount extends AbstractTotal
     private $currencyConverter;
 
     /**
+     * @var Config
+     */
+    protected $config;
+
+    /**
      * @param DataObjectHelper $dataObjectHelper
      * @param CartRepositoryInterface $cartRepository
      * @param GiftcardRepositoryInterface $giftcardRepository
      * @param CurrencyConverter $currencyConverter
+     * @param Config $config
      * @param array $data
      */
     public function __construct(
@@ -52,6 +59,7 @@ class InvoiceDiscount extends AbstractTotal
         CartRepositoryInterface $cartRepository,
         GiftcardRepositoryInterface $giftcardRepository,
         CurrencyConverter $currencyConverter,
+        Config $config,
         $data = []
     )
     {
@@ -60,6 +68,7 @@ class InvoiceDiscount extends AbstractTotal
         $this->cartRepository = $cartRepository;
         $this->giftcardRepository = $giftcardRepository;
         $this->currencyConverter = $currencyConverter;
+        $this->config = $config;
     }
 
     /**
@@ -76,7 +85,7 @@ class InvoiceDiscount extends AbstractTotal
 
         if ($quote->getDiggecardGiftcardDiscount()) {
 
-            $label = __('Diggecard Giftcard');
+            $label = $this->config->getDiscountLabel();
 
             $giftcardDiscountValue = -$quote->getDiggecardGiftcardDiscount();
             $baseGiftcardDiscountValue = $this->currencyConverter->convertToBaseCurrency($giftcardDiscountValue);

@@ -36,7 +36,10 @@
                 <field id="heading" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Heading</label>
                 </field>
-                <field id="enable_logging" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="discount_label" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Discount Label</label>
+                </field>
+                <field id="enable_logging" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enabled Logging</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>

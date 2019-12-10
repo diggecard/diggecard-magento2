@@ -19,6 +19,7 @@ class Config
     const XML_PATH_IFRAME_SRC = 'diggecard/giftcard/iframe_src';
     const XML_PATH_TIME_TO_RESERVE = 'diggecard/giftcard/time_to_reserve';
     const XML_PATH_HEADING = 'diggecard/giftcard/heading';
+    const XML_PATH_DISCOUNT_LABEL = 'diggecard/giftcard/discount_label';
     /**#@-*/
 
     /**
@@ -124,15 +125,28 @@ class Config
     }
 
     /**
-     * Retrieve config value of reserve time
+     * Retrieve config value of heading text
      *
-     * @return float
+     * @return string
      */
     public function getHeading()
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_HEADING,
             ScopeInterface::SCOPE_WEBSITE
+        );
+    }
+
+    /**
+     * Retrieve config value of discount message
+     *
+     * @return string
+     */
+    public function getDiscountLabel()
+    {
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_DISCOUNT_LABEL,
+            ScopeInterface::SCOPE_STORE
         );
     }
 }

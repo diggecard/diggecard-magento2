@@ -10,6 +10,7 @@
                 <active>0</active>
                 <time_to_reserve>60</time_to_reserve>
                 <heading>There is Diggecard Page...</heading>
+                <discount_label>Diggecard Giftcard</discount_label>
             </giftcard>
         </diggecard>
     </default>
