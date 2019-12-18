@@ -1,0 +1,27 @@
+<tr class="totals diggecard-giftcard excl">
+    <if args="diggecardIsEnable()">
+        <tr id="giftcard-add" data-bind="visible: !giftcardValid()">
+            <label for="giftcard_code" class="label" data-bind="text: 'Giftcard Code'"></label>
+            <input id="giftcard_code" name="giftcard_code" class="price" data-bind="value: getGiftcardDefaultCode()"/>
+            <button class="primary update-total" data-bind="click: setDiscountValue">Update</button>
+            <span class="giftcard-invalid" data-bind="visible: qrInvalidError">This QR Code is invalid!</span>
+            <span class="giftcard-invalid" data-bind="visible: cardViaCardError">Cannot purchase Gift Card via Gift Card!</span>
+            <span class="giftcard-invalid" data-bind="visible: emptyGiftCard">Gift Card is empty!</span>
+            <span class="giftcard-invalid" data-bind="visible: noSuchGiftCard">No such Gift Card!</span>
+            <span class="giftcard-invalid" data-bind="visible: noGiftCardEntered">Enter Gift Card Code!</span>
+        </tr>
+        <tr id="giftcard-info" data-bind="visible: giftcardValid">
+            <th class="mark" scope="row">
+                <span class="title" data-bind="text: getTitle()"></span>
+                <br>
+                <span class="value qr_code" data-bind="text: 'QR Code: ' + getGiftcardQrCode()"></span>
+                <button class="primary update-total" data-bind="click: removeGiftcardDiscount">Cancel</button>
+            </th>
+            <td class="amount">
+                <span class="price"
+                      data-bind="text: getValue()">
+                </span>
+            </td>
+        </tr>
+    </if>
+</tr>

@@ -6,9 +6,10 @@ define(
         'Magento_Checkout/js/model/quote',
         'mage/url',
         'Magento_Checkout/js/action/get-totals',
-        'Magento_Customer/js/customer-data'
+        'Magento_Customer/js/customer-data',
+        'Magento_Checkout/js/model/totals',
     ],
-    function ($, ko, Component, quote, url, getTotalsAction, customerData) {
+    function ($, ko, Component, quote, url, getTotalsAction, customerData, totals) {
         "use strict";
         return Component.extend({
             giftcardValid: ko.observable(false),
@@ -21,9 +22,10 @@ define(
             emptyGiftCard: ko.observable(false),
             noSuchGiftCard: ko.observable(false),
             noGiftCardEntered: ko.observable(false),
+            totals: quote.getTotals(),
 
             defaults: {
-                template: 'Diggecard_Giftcard/checkout/summary/giftcard'
+                template: 'Diggecard_Giftcard/checkout/cart/giftcard'
             },
 
             initialize: function(){
@@ -52,6 +54,18 @@ define(
                 this.giftcardQrCode(ajaxData.giftcardQrCode);
                 this.giftcardValueRemains(ajaxData.giftcardValueRemains);
                 this.currentCurrency(ajaxData.currentCurrency)
+            },
+
+            getValue: function() {
+                var price = 0;
+                if (this.totals()) {
+                    price = totals.getSegment('diggecard_giftcard_discount').value;
+                }
+                return this.getFormattedPrice(price);
+            },
+
+            getTitle: function() {
+                return totals.getSegment('diggecard_giftcard_discount').title;
             },
 
             setDiscountValue: function(){

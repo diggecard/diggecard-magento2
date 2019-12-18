@@ -1,0 +1,13 @@
+<!-- ko if: isDiggecardEnable() -->
+<tr class="totals diggecard excl">
+    <th class="mark" scope="row">
+        <span class="title" data-bind="text: getTitle()"></span>
+        <span class="value qr_code" data-bind="text: 'QR Code: ' + getGiftcardQrCode()"></span>
+    </th>
+    <td class="amount">
+        <span class="price"
+            data-bind="text: getValue()">
+        </span>
+    </td>
+</tr>
+<!-- /ko -->
