@@ -14,7 +14,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Model\Order;
 use Diggecard\Giftcard\Model\Product\Type\Giftcard as GiftcardType;
 use Diggecard\Giftcard\Api\OrderApiRepositoryInterface;
 use Magento\Framework\Event\Observer;
@@ -38,11 +37,6 @@ class Save implements ObserverInterface
         'new',
         'processing',
     ];
-
-    /**
-     * @var Order
-     */
-    protected $orderModel;
 
     /**
      * @var OrderApiRepositoryInterface
@@ -78,7 +72,6 @@ class Save implements ObserverInterface
 
     /**
      * Complete constructor.
-     * @param Order $orderModel
      * @param OrderApiRepositoryInterface $orderApiRepository
      * @param GiftcardRepositoryInterface $giftcardRepository
      * @param GiftcardFactory $giftcardFactory
@@ -88,7 +81,6 @@ class Save implements ObserverInterface
      * @param Session $customerSession
      */
     public function __construct(
-        Order $orderModel,
         OrderApiRepositoryInterface $orderApiRepository,
         GiftcardRepositoryInterface $giftcardRepository,
         GiftcardFactory $giftcardFactory,
@@ -98,7 +90,6 @@ class Save implements ObserverInterface
         Session $customerSession
     )
     {
-        $this->orderModel = $orderModel;
         $this->orderApiRepository = $orderApiRepository;
         $this->giftcardRepository = $giftcardRepository;
         $this->giftcardFactory = $giftcardFactory;
@@ -126,6 +117,7 @@ class Save implements ObserverInterface
         $this->logger->saveLog(__('complete_observer'));
         if ($this->customerSession->getDelegatedNewCustomerData()) {
             $this->logger->saveLog(__('Customer creation'));
+
             return $order;
         }
 
@@ -165,7 +157,6 @@ class Save implements ObserverInterface
             }
         }
 
-
         if (!empty($errors)) {
             $message = implode(', ', $errors);
             throw new LocalizedException(
@@ -179,7 +170,9 @@ class Save implements ObserverInterface
         return $order;
     }
 
-
+    /**
+     * @param $giftcardData
+     */
     private function addGiftcard($giftcardData)
     {
         $giftcard = $this->giftcardFactory->create();
@@ -189,37 +182,29 @@ class Save implements ObserverInterface
             if (in_array($key, $keys)) {
                 switch ($key) {
                     case 'qrCode':
-                    {
                         $giftcard->setQrCode($giftcardData['qrCode']);
                         break;
-                    }
                     case 'valueRemains':
-                    {
                         $giftcard->setValueRemains($giftcardData['valueRemains']);
+                        $giftcard->setBaseValueRemains($giftcardData['valueRemains']);
                         break;
-                    }
                     case 'createdTime':
-                    {
-                        $date = date("Y-m-d H:i:s", strtotime($giftcardData['createdTime']));
+                        $date = date("Y-m-d H:i:s", $giftcardData['createdTime']);
                         $giftcard->setCreatedAt($date);
                         $giftcard->setUpdatedAt($date);
                         break;
-                    }
                     case 'validUntilTime':
-                    {
-                        $date = date("Y-m-d H:i:s", strtotime($giftcardData['validUntilTime']));
+                        $date = date("Y-m-d H:i:s", $giftcardData['validUntilTime']);
                         $giftcard->setValidUntil($date);
                         break;
-                    }
                     default:
-                    {
                         $cardData[$key] = $value;
-                    }
                 }
             } else {
                 $cardData[$key] = $value;
             }
         }
+
         $jsonCardData = $this->json->serialize($cardData);
         $giftcard->setCardData($jsonCardData);
         try {

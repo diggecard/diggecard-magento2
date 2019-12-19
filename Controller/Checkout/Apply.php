@@ -1,7 +1,7 @@
 <?php
 /**
- * @author Elogic Team
- * @copyright Copyright (c) 2019 Elogic (https://elogic.co)
+ * @author DiggEcard Team
+ * @copyright Copyright (c) 2019 DiggEcard (https://diggecard.com)
  */
 
 namespace Diggecard\Giftcard\Controller\Checkout;
@@ -107,6 +107,7 @@ class Apply extends Action
 
     /**
      * @return ResponseInterface|Json|ResultInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute()
@@ -127,6 +128,7 @@ class Apply extends Action
                     'error_type' => 5,
                     'message' => 'Enter Gift Card Code!'
                 ];
+
                 return $result->setData($response);
             }
             $quote = $this->checkoutSession->getQuote();
@@ -142,6 +144,7 @@ class Apply extends Action
                     'error_type' => 4,
                     'message' => 'No such giftcard!'
                 ];
+
                 return $result->setData($response);
             }
 
@@ -155,6 +158,7 @@ class Apply extends Action
                             'error_type' => 2,
                             'message' => 'Cannot purchase giftcard via giftcard'
                         ];
+
                         return $result->setData($response);
                     }
                 }
@@ -166,6 +170,7 @@ class Apply extends Action
                     'error_type' => 3,
                     'message' => 'Cannot apply empty giftcard'
                 ];
+
                 return $result->setData($response);
             }
 
@@ -192,7 +197,7 @@ class Apply extends Action
                 ];
             }
         }
-        return $result->setData($response);
 
+        return $result->setData($response);
     }
 }

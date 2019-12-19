@@ -14,7 +14,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Model\Order;
 use Diggecard\Giftcard\Model\Product\Type\Giftcard as GiftcardType;
 use Diggecard\Giftcard\Api\OrderApiRepositoryInterface;
 use Magento\Framework\Event\Observer;
@@ -23,7 +22,6 @@ use Diggecard\Giftcard\Model\GiftcardFactory;
 use Diggecard\Giftcard\Helper\Data as Json;
 use Magento\Customer\Model\Session;
 use Magento\Sales\Model\Order\Invoice;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Complete
@@ -32,12 +30,6 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class Complete implements ObserverInterface
 {
-
-    /**
-     * @var Order
-     */
-    protected $orderModel;
-
     /**
      * @var OrderApiRepositoryInterface
      */
@@ -71,12 +63,8 @@ class Complete implements ObserverInterface
      */
     protected $hash;
 
-    /** @var StoreManagerInterface */
-    protected $storeManager;
-
     /**
      * Complete constructor.
-     * @param Order $orderModel
      * @param OrderApiRepositoryInterface $orderApiRepository
      * @param GiftcardRepositoryInterface $giftcardRepository
      * @param GiftcardFactory $giftcardFactory
@@ -86,25 +74,21 @@ class Complete implements ObserverInterface
      * @param Session $customerSession
      */
     public function __construct(
-        Order $orderModel,
         OrderApiRepositoryInterface $orderApiRepository,
         GiftcardRepositoryInterface $giftcardRepository,
         GiftcardFactory $giftcardFactory,
         Log $logger,
         Json $json,
         Hash $hash,
-        StoreManagerInterface $storeManager,
         Session $customerSession
     )
     {
-        $this->orderModel = $orderModel;
         $this->orderApiRepository = $orderApiRepository;
         $this->giftcardRepository = $giftcardRepository;
         $this->giftcardFactory = $giftcardFactory;
         $this->json = $json;
         $this->logger = $logger;
         $this->hash = $hash;
-        $this->storeManager = $storeManager;
         $this->customerSession = $customerSession;
     }
 
@@ -121,11 +105,11 @@ class Complete implements ObserverInterface
         if ($invoice->getId() && $invoice->getState() == Invoice::STATE_PAID) {
             /** @var OrderInterface */
             $order = $invoice->getOrder();
-            $orderState = $order->getState();
             $errors = [];
             $this->logger->saveLog(__('complete_observer'));
             if ($this->customerSession->getDelegatedNewCustomerData()) {
                 $this->logger->saveLog(__('Customer creation'));
+
                 return $order;
             }
 
@@ -181,7 +165,9 @@ class Complete implements ObserverInterface
         return $order;
     }
 
-
+    /**
+     * @param $giftcardData
+     */
     private function addGiftcard($giftcardData)
     {
         $giftcard = $this->giftcardFactory->create();
@@ -191,32 +177,23 @@ class Complete implements ObserverInterface
             if (in_array($key, $keys)) {
                 switch ($key) {
                     case 'qrCode':
-                    {
                         $giftcard->setQrCode($giftcardData['qrCode']);
                         break;
-                    }
                     case 'valueRemains':
-                    {
                         $giftcard->setValueRemains($giftcardData['valueRemains']);
+                        $giftcard->setBaseValueRemains($giftcardData['valueRemains']);
                         break;
-                    }
                     case 'createdTime':
-                    {
-                        $date = date("Y-m-d H:i:s", strtotime($giftcardData['createdTime']));
+                        $date = date("Y-m-d H:i:s", $giftcardData['createdTime']);
                         $giftcard->setCreatedAt($date);
                         $giftcard->setUpdatedAt($date);
                         break;
-                    }
                     case 'validUntilTime':
-                    {
-                        $date = date("Y-m-d H:i:s", strtotime($giftcardData['validUntilTime']));
+                        $date = date("Y-m-d H:i:s", $giftcardData['validUntilTime']);
                         $giftcard->setValidUntil($date);
                         break;
-                    }
                     default:
-                    {
                         $cardData[$key] = $value;
-                    }
                 }
             } else {
                 $cardData[$key] = $value;

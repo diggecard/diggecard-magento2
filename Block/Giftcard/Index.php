@@ -6,7 +6,6 @@
 
 namespace Diggecard\Giftcard\Block\Giftcard;
 
-use Diggecard\Giftcard\Helper\Data;
 use Diggecard\Giftcard\Model\GiftcardConfigProvider;
 use Magento\Framework\View\Element\Template;
 use Diggecard\Giftcard\Model\Config;
@@ -23,9 +22,6 @@ class Index extends Template
      */
     protected $config;
 
-    /** @var Data */
-    protected $_dataHelper;
-
     /** @var GiftcardConfigProvider */
     protected $_giftcardConfigProvider;
 
@@ -33,6 +29,7 @@ class Index extends Template
      * Index constructor.
      * @param Template\Context $context
      * @param Config $config
+     * @param GiftcardConfigProvider $giftcardConfigProvider
      * @param array $data
      */
     public function __construct(
@@ -62,6 +59,9 @@ class Index extends Template
         return $this->config->getHeading();
     }
 
+    /**
+     * @return bool
+     */
     public function isEnable()
     {
         return $this->_giftcardConfigProvider->isModuleEnable();
