@@ -34,6 +34,7 @@ class Index extends Action
      * Index constructor.
      * @param Context $context
      * @param PageFactory $pageFactory
+     * @param GiftcardConfigProvider $giftcardConfigProvider
      */
     public function __construct(
         Context $context,
@@ -49,6 +50,7 @@ class Index extends Action
 
     /**
      * @return ResponseInterface|ResultInterface|Page
+     * @throws NotFoundException
      */
     public function execute()
     {

@@ -12,9 +12,9 @@ use Diggecard\Giftcard\Helper\Log;
 use Diggecard\Giftcard\Model\GiftcardFactory;
 use Exception;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Psr\Log\LoggerInterface;
 use Diggecard\Giftcard\Api\GiftcardApiRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Message\ManagerInterface;
 
 /**
  * Class Manager
@@ -34,7 +34,7 @@ class Manager
     public $giftcardRepository;
 
     /**
-     * @var LoggerInterface
+     * @var Log
      */
     protected $logger;
 
@@ -49,8 +49,14 @@ class Manager
     protected $_storeManager;
 
     /**
+     * @var ManagerInterface
+     */
+    protected $_messageManager;
+
+    /**
      * Manager constructor.
      *
+     * @param ManagerInterface $messageManager
      * @param GiftcardFactory $giftcardFactory
      * @param GiftcardRepositoryInterface $giftcardRepository
      * @param GiftcardApiRepositoryInterface $giftcardApiRepository
@@ -58,6 +64,7 @@ class Manager
      * @param Log $logger
      */
     public function __construct(
+        ManagerInterface $messageManager,
         GiftcardFactory $giftcardFactory,
         GiftcardRepositoryInterface $giftcardRepository,
         GiftcardApiRepositoryInterface $giftcardApiRepository,
@@ -65,6 +72,7 @@ class Manager
         Log $logger
     )
     {
+        $this->_messageManager = $messageManager;
         $this->giftcardFactory = $giftcardFactory;
         $this->giftcardRepository = $giftcardRepository;
         $this->logger = $logger;
@@ -103,7 +111,7 @@ class Manager
                     $newGiftCard = $this->giftcardFactory->create();
                     $newGiftCard->setQrCode($remoteGiftcard['qrCode']);
                     $newGiftCard->setValueRemains($remoteGiftcard['valueRemains']);
-                    $date = date("Y-m-d H:i:s", strtotime($remoteGiftcard['createdTime']));
+                    $date = date("Y-m-d H:i:s", $remoteGiftcard['createdTime']);
                     $newGiftCard->setCreatedAt($date);
                     return $this->giftcardRepository->save($newGiftCard);
                 };

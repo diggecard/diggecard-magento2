@@ -1,7 +1,7 @@
 <?php
 /**
- * @author Elogic Team
- * @copyright Copyright (c) 2019 Elogic (https://elogic.co)
+ * @author DiggEcard Team
+ * @copyright Copyright (c) 2019 DiggEcard (https://diggecard.com)
  */
 
 namespace Diggecard\Giftcard\Controller\Giftcard;
@@ -18,6 +18,7 @@ use Diggecard\Giftcard\Service\ImportImageService as GiftcardImportImageService;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Checkout\Model\Session;
+use Magento\Framework\Image\Adapter\AdapterInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Framework\Filesystem;
@@ -80,12 +81,12 @@ class Add extends Action
     private $filesystem;
 
     /**
-     * @var ImageFactory
+     * @var AdapterFactory
      */
     private $imageFactory;
 
     /**
-     * @var StoreManager
+     * @var StoreManagerInterface
      */
     private $storeManager;
 

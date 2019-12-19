@@ -7,7 +7,6 @@
 namespace Diggecard\Giftcard\Service;
 
 use Diggecard\Giftcard\Model\Product\Type\Giftcard as GiftcardType;
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\State;
 use Magento\Catalog\Model\Product as ProductModel;

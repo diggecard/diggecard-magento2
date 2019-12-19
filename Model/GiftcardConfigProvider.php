@@ -40,7 +40,13 @@ class GiftcardConfigProvider implements ConfigProviderInterface
     /** @var ScopeConfigInterface */
     protected $_scopeConfig;
 
-
+    /**
+     * GiftcardConfigProvider constructor.
+     * @param CheckoutSession $checkoutSession
+     * @param GiftcardRepositoryInterface $giftcardRepository
+     * @param StoreManagerInterface $storeManager
+     * @param ScopeConfigInterface $scopeConfig
+     */
     public function __construct(
         CheckoutSession $checkoutSession,
         GiftcardRepositoryInterface $giftcardRepository,
@@ -82,6 +88,9 @@ class GiftcardConfigProvider implements ConfigProviderInterface
         return $config;
     }
 
+    /**
+     * @return bool
+     */
     public function isModuleEnable()
     {
         return (bool)$this->_scopeConfig->getValue(
