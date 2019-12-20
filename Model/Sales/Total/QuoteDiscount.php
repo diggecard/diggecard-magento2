@@ -38,8 +38,6 @@ class QuoteDiscount extends AbstractTotal
      */
     protected $config;
 
-    const CODE = 'diggecard_giftcard_discount';
-
     /**
      * GiftcardTotal constructor.
      *
@@ -56,6 +54,7 @@ class QuoteDiscount extends AbstractTotal
         $this->_priceCurrency = $priceCurrency;
         $this->giftcardRepository = $giftcardRepository;
         $this->config = $config;
+        $this->setCode('diggecard_giftcard_discount');
     }
 
     /**
@@ -82,12 +81,10 @@ class QuoteDiscount extends AbstractTotal
                 return $this;
             }
 
-            $label = $this->config->getDiscountLabel();
             $subtotal = (double)$total->getSubtotalInclTax() + $total->getDiscountAmount() + $total->getShippingTaxAmount();
             $subtotal += $total->getShippingAmount() ? $total->getShippingAmount() : 0;
             $discountAmount = ((double)$giftCard->getValueRemains() > $subtotal) ? $subtotal : (double)$giftCard->getValueRemains();
             $discountAmount = -$discountAmount;
-
 
             $quote->setDiggecardGiftcardDiscount($discountAmount);
             $quote->setDiggecardGiftcardBaseDiscount($discountAmount);
@@ -95,20 +92,38 @@ class QuoteDiscount extends AbstractTotal
             $total->setSubtotalWithDiscount($total->getSubtotal() + $discountAmount);
             $total->setBaseSubtotalWithDiscount($total->getBaseSubtotal() + $discountAmount);
 
-            $total->addTotalAmount($this->getCode(), $discountAmount);
-            $total->addBaseTotalAmount($this->getCode(), $discountAmount);
+            $total->setTotalAmount($this->getCode(), $discountAmount);
+            $total->setBaseTotalAmount($this->getCode(), $discountAmount);
 
-            if ($total->getDiscountAmount()) {
-                // If a discount exists in cart and another discount is applied, the add both discounts.
-                $discountAmount = $total->getDiscountAmount() + $discountAmount;
-                $label = $total->getDiscountDescription() ? $total->getDiscountDescription() : $label;
-            }
-
-            $total->setDiscountDescription($label);
-            $total->setDiscountAmount($discountAmount);
-            $total->setBaseDiscountAmount($discountAmount);
+            $total->setGrandTotal($total->getGrandTotal() + $discountAmount);
+            $total->setBaseGrandTotal($total->getBaseGrandTotal() + $discountAmount);
         }
 
         return $this;
     }
+
+    /**
+     * @param Quote $quote
+     * @param Total $total
+     * @return array
+     */
+    public function fetch(
+        \Magento\Quote\Model\Quote $quote,
+        \Magento\Quote\Model\Quote\Address\Total $total
+    ) {
+        return [
+            'code' => $this->getCode(),
+            'title' => $this->getLabel(),
+            'value' => $quote->getDiggecardGiftcardDiscount()
+        ];
+    }
+
+    /**
+     * get label
+     * @return string
+     */
+    public function getLabel() {
+        return __($this->config->getDiscountLabel());
+    }
+
 }
