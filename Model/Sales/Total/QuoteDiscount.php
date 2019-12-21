@@ -81,9 +81,8 @@ class QuoteDiscount extends AbstractTotal
                 return $this;
             }
 
-            $subtotal = (double)$total->getSubtotalInclTax() + $total->getDiscountAmount() + $total->getShippingTaxAmount();
-            $subtotal += $total->getShippingAmount() ? $total->getShippingAmount() : 0;
-            $discountAmount = ((double)$giftCard->getValueRemains() > $subtotal) ? $subtotal : (double)$giftCard->getValueRemains();
+            $grandTotal = (double)$total->getGrandTotal();
+            $discountAmount = ((double)$giftCard->getValueRemains() > $grandTotal) ? $grandTotal : (double)$giftCard->getValueRemains();
             $discountAmount = -$discountAmount;
 
             $quote->setDiggecardGiftcardDiscount($discountAmount);
@@ -125,5 +124,4 @@ class QuoteDiscount extends AbstractTotal
     public function getLabel() {
         return __($this->config->getDiscountLabel());
     }
-
 }
