@@ -85,25 +85,13 @@ class CaptureValue implements ObserverInterface
         if ($invoice->getId() && $invoice->getState() == Invoice::STATE_PAID) {
             $this->logger->saveLog(__('Capture observer'));
             $salesOrder = $invoice->getOrder();
-
-            try {
-                $quote = $this->quoteRepository->get($salesOrder->getQuoteId());
-                $giftcardId = $quote->getDiggecardGiftcardId();
-                $reserveId = $quote->getDiggecardGiftcardReservationId();
-            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                $giftcardId = $salesOrder->getDiggecardGiftcardId();
-                $reserveId = $salesOrder->getDiggecardGiftcardReservationId();
-            }
+            $giftcardId = $salesOrder->getDiggecardGiftcardId();
+            $reserveId = $salesOrder->getDiggecardGiftcardReservationId();
 
             if ($giftcardId && $reserveId) {
                 $giftcard = $this->giftcardRepository->get($giftcardId);
-                if (!empty($quote)) {
-                    $orderDiscount = $quote->getDiggecardGiftcardDiscount();
-                    $orderBaseDiscount = $quote->getDiggecardGiftcardBaseDiscount();
-                } else {
-                    $orderDiscount = $salesOrder->getDiggecardGiftcardDiscount();
-                    $orderBaseDiscount = $salesOrder->getDiggecardGiftcardBaseDiscount();
-                }
+                $orderDiscount = $salesOrder->getDiggecardGiftcardDiscount();
+                $orderBaseDiscount = $salesOrder->getDiggecardGiftcardBaseDiscount();
 
                 $data = [
                     "reservationCode" => $reserveId,  // reserve id

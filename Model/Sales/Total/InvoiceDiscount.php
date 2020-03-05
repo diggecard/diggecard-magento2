@@ -9,7 +9,6 @@ namespace Diggecard\Giftcard\Model\Sales\Total;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Sales\Model\Order\Invoice as ModelInvoice;
 use Magento\Sales\Model\Order\Invoice\Total\AbstractTotal;
-use Magento\Quote\Api\CartRepositoryInterface;
 use Diggecard\Giftcard\Api\GiftcardRepositoryInterface;
 use Diggecard\Giftcard\Service\CurrencyConverter;
 use Diggecard\Giftcard\Model\Config;
@@ -48,7 +47,6 @@ class InvoiceDiscount extends AbstractTotal
 
     /**
      * @param DataObjectHelper $dataObjectHelper
-     * @param CartRepositoryInterface $cartRepository
      * @param GiftcardRepositoryInterface $giftcardRepository
      * @param CurrencyConverter $currencyConverter
      * @param Config $config
@@ -56,7 +54,6 @@ class InvoiceDiscount extends AbstractTotal
      */
     public function __construct(
         DataObjectHelper $dataObjectHelper,
-        CartRepositoryInterface $cartRepository,
         GiftcardRepositoryInterface $giftcardRepository,
         CurrencyConverter $currencyConverter,
         Config $config,
@@ -65,7 +62,6 @@ class InvoiceDiscount extends AbstractTotal
     {
         parent::__construct($data);
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->cartRepository = $cartRepository;
         $this->giftcardRepository = $giftcardRepository;
         $this->currencyConverter = $currencyConverter;
         $this->config = $config;
@@ -78,22 +74,14 @@ class InvoiceDiscount extends AbstractTotal
     {
         parent::collect($invoice);
         $order = $invoice->getOrder();
-        $quoteId = $order->getQuoteId();
-
-        try {
-            $quote = $this->cartRepository->get($quoteId);
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-            $quote = $order;
-        }
-
         $invoiceGrandTotal = $invoice->getGrandTotal();
         $baseGrandInvoiceTotal = $invoice->getBaseGrandTotal();
 
-        if ($quote->getDiggecardGiftcardDiscount()) {
+        if ($order->getDiggecardGiftcardDiscount()) {
 
             $label = $this->config->getDiscountLabel();
 
-            $giftcardDiscountValue = -$quote->getDiggecardGiftcardDiscount();
+            $giftcardDiscountValue = -$order->getDiggecardGiftcardDiscount();
             $baseGiftcardDiscountValue = $this->currencyConverter->convertToBaseCurrency($giftcardDiscountValue);
 
             $totalGiftcardDiscountInvoiced = 0;
@@ -133,9 +121,9 @@ class InvoiceDiscount extends AbstractTotal
                 }
             }
 
-            $quoteGiftcardId = $quote->getDiggecardGiftcardId();
-            $quoteGiftcard = $this->giftcardRepository->get($quoteGiftcardId);
-            $quoteGiftcard->setValueRemains($totalDiscountAmountGiftcard);
+            $orderGiftcardId = $order->getDiggecardGiftcardId();
+            $orderGiftcard = $this->giftcardRepository->get($orderGiftcardId);
+            $orderGiftcard->setValueRemains($totalDiscountAmountGiftcard);
 
             $order->setDgGiftcardAmountInvoiced($invoiceGrandTotal);
             $order->setDgGiftcardBaseAmountInvoiced($baseGrandInvoiceTotal);
