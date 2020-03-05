@@ -161,6 +161,51 @@ class UpgradeSchema implements UpgradeSchemaInterface
             );
         }
 
+        if (version_compare($context->getVersion(), '1.0.13', '<')) {
+            $connection->addColumn(
+                $installer->getTable('sales_order'),
+                'diggecard_giftcard_id',
+                [
+                    'type' => Table::TYPE_DECIMAL,
+                    'length' => '30,4',
+                    'nullable' => true,
+                    'comment' => 'Giftcard ID'
+                ]
+            );
+
+            $connection->addColumn(
+                $installer->getTable('sales_order'),
+                'diggecard_giftcard_discount',
+                [
+                    'type' => Table::TYPE_DECIMAL,
+                    'length' => '30,4',
+                    'nullable' => true,
+                    'comment' => 'Giftcard Discount'
+                ]
+            );
+
+            $connection->addColumn(
+                $installer->getTable('sales_order'),
+                'diggecard_giftcard_base_discount',
+                [
+                    'type' => Table::TYPE_DECIMAL,
+                    'length' => '30,4',
+                    'nullable' => true,
+                    'comment' => 'Giftcard Base Discount'
+                ]
+            );
+
+            $connection->addColumn(
+                $installer->getTable('sales_order'),
+                'diggecard_giftcard_reservation_id',
+                [
+                    'type' => Table::TYPE_TEXT,
+                    'nullable' => true,
+                    'comment' => 'Giftcard Amount Reservation ID'
+                ]
+            );
+        }
+
         $installer->endSetup();
     }
 }

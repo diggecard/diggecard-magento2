@@ -85,19 +85,19 @@ class CaptureValue implements ObserverInterface
         if ($invoice->getId() && $invoice->getState() == Invoice::STATE_PAID) {
             $this->logger->saveLog(__('Capture observer'));
             $salesOrder = $invoice->getOrder();
-            $quoteId = $salesOrder->getQuoteId();
-            $quote = $this->quoteRepository->get($quoteId);
-            $giftcardId = $quote->getDiggecardGiftcardId();
-            $reserveId = $quote->getDiggecardGiftcardReservationId();
+            $giftcardId = $salesOrder->getDiggecardGiftcardId();
+            $reserveId = $salesOrder->getDiggecardGiftcardReservationId();
+
             if ($giftcardId && $reserveId) {
                 $giftcard = $this->giftcardRepository->get($giftcardId);
-                $quoteDiscount = $quote->getDiggecardGiftcardDiscount();
-                $quoteBaseDiscount = $quote->getDiggecardGiftcardBaseDiscount();
+                $orderDiscount = $salesOrder->getDiggecardGiftcardDiscount();
+                $orderBaseDiscount = $salesOrder->getDiggecardGiftcardBaseDiscount();
+
                 $data = [
                     "reservationCode" => $reserveId,  // reserve id
                     "merchantId" => "",
                     "qrCode" => (string)$giftcard->getQrCode(),
-                    "amount" => number_format(abs($quoteBaseDiscount), 2, '.', ''),
+                    "amount" => number_format(abs($orderBaseDiscount), 2, '.', ''),
                     "totalOrderAmount" => (float)$invoice->getSubtotal()
                 ];
                 $this->logger->saveLog(__('Capture value'));
