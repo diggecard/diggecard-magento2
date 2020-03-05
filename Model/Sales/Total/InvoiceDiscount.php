@@ -79,7 +79,13 @@ class InvoiceDiscount extends AbstractTotal
         parent::collect($invoice);
         $order = $invoice->getOrder();
         $quoteId = $order->getQuoteId();
-        $quote = $this->cartRepository->get($quoteId);
+
+        try {
+            $quote = $this->cartRepository->get($quoteId);
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            $quote = $order;
+        }
+
         $invoiceGrandTotal = $invoice->getGrandTotal();
         $baseGrandInvoiceTotal = $invoice->getBaseGrandTotal();
 
