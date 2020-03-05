@@ -114,6 +114,12 @@ class ReserveValue implements ObserverInterface
                 }
                 $this->logger->saveLog($result);
                 $quote->setDiggecardGiftcardReservationId($result['reservationCode']);
+
+                $salesOrder->setDiggecardGiftcardId($quote->getDiggecardGiftcardId());
+                $salesOrder->setDiggecardGiftcardDiscount($quote->getDiggecardGiftcardDiscount());
+                $salesOrder->setDiggecardGiftcardBaseDiscount($quote->getDiggecardGiftcardDiscount());
+                $salesOrder->setDiggecardGiftcardReservationId($result['reservationCode']);
+
                 $giftcard->setCardData(json_encode($result));
                 $giftcard->setValueRemains($giftcard->getValueRemains() - abs($quoteBaseDiscount));
                 $this->giftcardRepository->save($giftcard);

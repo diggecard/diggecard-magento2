@@ -14,7 +14,6 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Model\Order\Invoice;
 
 /**
@@ -24,11 +23,6 @@ use Magento\Sales\Model\Order\Invoice;
  */
 class CaptureValue implements ObserverInterface
 {
-    /**
-     * @var CartRepositoryInterface
-     */
-    protected $quoteRepository;
-
     /**
      * @var GiftcardRepositoryInterface
      */
@@ -49,21 +43,18 @@ class CaptureValue implements ObserverInterface
 
     /**
      * ReserveValue constructor.
-     * @param CartRepositoryInterface $quoteRepository
      * @param GiftcardRepositoryInterface $giftcardRepository
      * @param GiftcardApiRepositoryInterface $giftcardApiRepository
      * @param ManagerInterface $messageManager
      * @param Log $logger
      */
     public function __construct(
-        CartRepositoryInterface $quoteRepository,
         GiftcardRepositoryInterface $giftcardRepository,
         GiftcardApiRepositoryInterface $giftcardApiRepository,
         ManagerInterface $messageManager,
         Log $logger
     )
     {
-        $this->quoteRepository = $quoteRepository;
         $this->giftcardRepository = $giftcardRepository;
         $this->giftcardApiRepository = $giftcardApiRepository;
         $this->messageManager = $messageManager;
@@ -85,19 +76,17 @@ class CaptureValue implements ObserverInterface
         if ($invoice->getId() && $invoice->getState() == Invoice::STATE_PAID) {
             $this->logger->saveLog(__('Capture observer'));
             $salesOrder = $invoice->getOrder();
-            $quoteId = $salesOrder->getQuoteId();
-            $quote = $this->quoteRepository->get($quoteId);
-            $giftcardId = $quote->getDiggecardGiftcardId();
-            $reserveId = $quote->getDiggecardGiftcardReservationId();
+            $giftcardId = $salesOrder->getDiggecardGiftcardId();
+            $reserveId = $salesOrder->getDiggecardGiftcardReservationId();
             if ($giftcardId && $reserveId) {
                 $giftcard = $this->giftcardRepository->get($giftcardId);
-                $quoteDiscount = $quote->getDiggecardGiftcardDiscount();
-                $quoteBaseDiscount = $quote->getDiggecardGiftcardBaseDiscount();
+                $orderDiscount = $salesOrder->getDiggecardGiftcardDiscount();
+                $orderBaseDiscount = $salesOrder->getDiggecardGiftcardBaseDiscount();
                 $data = [
                     "reservationCode" => $reserveId,  // reserve id
                     "merchantId" => "",
                     "qrCode" => (string)$giftcard->getQrCode(),
-                    "amount" => number_format(abs($quoteBaseDiscount), 2, '.', ''),
+                    "amount" => number_format(abs($orderBaseDiscount), 2, '.', ''),
                     "totalOrderAmount" => (float)$invoice->getSubtotal()
                 ];
                 $this->logger->saveLog(__('Capture value'));
